@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>花开锦绣·命定花签｜抽一支你的天命花神</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fce4ec, #f3e5f5);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 { color: #e91e63; margin-bottom: 0.5rem; }
+
+    .progress {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 1.5rem;
+    }
+
+    .question {
+      margin: 1.5rem 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+
+    .option-btn {
+      background: #fff0f5;
+      border: 2px solid #f8bbd0;
+      border-radius: 25px;
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      color: #333;
+    }
+
+    .option-btn:hover {
+      background: #fce4ec;
+      border-color: #e91e63;
+    }
+
+    .option-btn.selected {
+      background: #e91e63;
+      color: white;
+      border-color: #e91e63;
+    }
+
+    .next-btn, .btn-link, .btn-primary {
+      background: #e91e63;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0.5rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .next-btn:disabled {
+      background: #ddd;
+      cursor: not-allowed;
+    }
+
+    .btn-link { background: #ff9800; }
+    .btn-primary { background: #4caf50; }
+
+    /* ---------- 弹窗通用 ---------- */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 24px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      margin: auto;
+    }
+
+    /* ---------- 结果弹窗样式 ---------- */
+    .result-header {
+      font-size: 2.2rem;
+      color: #e91e63;
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+      letter-spacing: 2px;
+    }
+
+    .result-subtitle {
+      font-size: 1.1rem;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    /* 图片容器：放大图片，圆角卡片风格 */
+    .flower-img-wrapper {
+      width: 80%;
+      max-width: 280px;
+      margin: 0 auto 1.5rem;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(233, 30, 99, 0.15);
+    }
+
+    .flower-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 1 / 1;  /* 正方形，可改为 auto 自适应 */
+      object-fit: cover;
+    }
+
+    /* 判词区：紧凑但清晰 */
+    .result-poem {
+      background: #fff9fb;
+      border-left: 5px solid #e91e63;
+      padding: 1rem 1.2rem;
+      margin: 1.5rem 0;
+      text-align: left;
+      line-height: 1.7;
+      font-size: 0.92rem;
+      color: #444;
+      border-radius: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* 转化引导按钮 */
+    .convert-link {
+      display: block;
+      background: linear-gradient(135deg, #e91e63, #c2185b);
+      color: white;
+      padding: 0.9rem;
+      border-radius: 30px;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .convert-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+    }
+
+    .convert-hint {
+      font-size: 0.8rem;
+      color: #999;
+      margin: 0.5rem 0 1rem;
+      font-style: italic;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .action-buttons button {
+      background: #f5f5f5;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      color: #555;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .action-buttons button:hover {
+      background: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌸 测一测，你的命定花神是哪一朵？</h1>
+    <div id="quiz"></div>
+    <div id="submitArea" style="display:none;">
+      <p>回答完毕！点击下方按钮看看你的天命花神~</p>
+      <button id="submitBtn" class="next-btn">查看我的天命花神</button>
+    </div>
+  </div>
+
+  <!-- 预约引导弹窗（保持不变） -->
+  <div id="guideModal" class="modal">
+    <div class="modal-content">
+      <h2>马上揭晓！</h2>
+      <p>请先去腾讯视频预约《花开锦绣》，即可解锁结果👇</p>
+      <a id="reserveLink" href="https://v.qq.com/x/cover/mzc00200seo6p1w/b410283m67n.html" target="_blank" class="btn-link">去预约</a>
+      <div id="reservedBtnContainer"></div>
+    </div>
+  </div>
+
+  <!-- 结果展示弹窗（结构优化：增加图片容器，底部按钮分组） -->
+  <div id="resultModal" class="modal">
+    <div class="modal-content">
+      <div class="result-header" id="flowerName"></div>
+      <div class="result-subtitle" id="flowerYayi"></div>
+      <div class="flower-img-wrapper">
+        <img id="flowerImg" class="flower-img" src="" alt="花神图">
+      </div>
+      <div class="result-poem" id="flowerPoem"></div>
+      <a id="convertLink" href="https://v.qq.com/x/cover/mzc00200seo6p1w/b410283m67n.html" target="_blank" class="convert-link">
+        👉 点击领取你的专属“锦绣命格”完整剧本
+      </a>
+      <p class="convert-hint">花有千种，命有万变，唯有你的选择，能让锦绣成真。</p>
+      <div class="action-buttons">
+        <button onclick="closeResult()">关闭</button>
+        <button onclick="location.reload()">再测一次</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ================= 每次刷新清除预约记录 =================
+    localStorage.removeItem('hasClickedReserve');
+
+    // ================= 题目数据 =================
+    const questions = [
+      // E/I 维度 1-5
+      { question: "在一个陌生的社交场合，你更可能：", optionA: "主动穿梭人群，寻找有趣的人聊天", optionB: "安静地待在角落，等别人来接近你", dimension: "EI" },
+      { question: "当你学习一项新技能时，你倾向于：", optionA: "边做边与人讨论，在交流中纠正", optionB: "独自反复练习，熟练后再展示", dimension: "EI" },
+      { question: "工作之余，最能让你恢复能量的方式是：", optionA: "约朋友热热闹闹地聚会", optionB: "一个人宅家看书或放空", dimension: "EI" },
+      { question: "遇到棘手难题，你第一反应是：", optionA: "打电话给朋友，边倾诉边理思路", optionB: "关起门来自己琢磨，解决后再告知", dimension: "EI" },
+      { question: "在团队协作中，你通常扮演：", optionA: "积极发言、带动气氛的人", optionB: "认真倾听、最后拍板的人", dimension: "EI" },
+      // S/N 维度 6-10
+      { question: "读一本小说时，你更容易被什么吸引？", optionA: "情节的具体走向和人物行动", optionB: "字里行间的氛围和隐喻", dimension: "SN" },
+      { question: "你更擅长记忆哪种信息？", optionA: "具体数据、日期、地名", optionB: "抽象概念、理论框架", dimension: "SN" },
+      { question: "面对新项目，你首先会：", optionA: "搜集过往案例，按流程推进", optionB: "脑暴各种可能性，寻找创新点", dimension: "SN" },
+      { question: "与人交谈时，你往往更关注：", optionA: "对方提到的实际事例", optionB: "对方没说出口的情绪与潜台词", dimension: "SN" },
+      { question: "你常被人形容为：", optionA: "脚踏实地，务实可靠", optionB: "天马行空，理想主义", dimension: "SN" },
+      // T/F 维度 11-15
+      { question: "做重大决定时，你更依赖：", optionA: "逻辑分析和客观数据", optionB: "内心的感受和价值观", dimension: "TF" },
+      { question: "在争论中，你更看重：", optionA: "论证是否严密、有据", optionB: "论点是否触动人心", dimension: "TF" },
+      { question: "你更钦佩哪种领导风格？", optionA: "铁面无私，赏罚分明", optionB: "温暖包容，善于共情", dimension: "TF" },
+      { question: "好友向你哭诉烦恼，你通常会：", optionA: "帮他拆解问题，给出解决方案", optionB: "先给个拥抱，让他发泄情绪", dimension: "TF" },
+      { question: "你觉得自己天生更擅长：", optionA: "客观评判事物对错", optionB: "体察他人的喜怒哀乐", dimension: "TF" },
+      // J/P 维度 16-20
+      { question: "日常生活中，你更偏爱：", optionA: "固定的作息和计划表", optionB: "随性的节奏，走到哪算哪", dimension: "JP" },
+      { question: "规划一次旅行，你倾向：", optionA: "提前订好每日行程和住宿", optionB: "只定大方向，到地再随缘探索", dimension: "JP" },
+      { question: "工作中最让你抓狂的是：", optionA: "临时打乱原本的计划", optionB: "重复单调、毫无变化的流程", dimension: "JP" },
+      { question: "对待待办事项，你习惯：", optionA: "来一件处理一件，有条不紊", optionB: "攒到一起，集中高效解决", dimension: "JP" },
+      { question: "整理房间时，你的风格是：", optionA: "分门别类，各归其位", optionB: "大致看着整洁就行，细节随意", dimension: "JP" }
+    ];
+
+    // ================= 花神结果库（图片链接已保留） =================
+    const results = {
+      // 标准16型
+      "INTJ": { name: "琼花", yayi: "维扬一株，孤傲帝王", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%90%BC%E8%8A%B1.jpg", poem: "你往那里一站，空气自动让出三尺。你像极了古画里独坐高阁的策士，不屑解释，不屑争辩，因为你早已看穿十步之后的结局。世人觉得你冷，只有你知道，这份冷是为了保护内心那座精密的城池。你的决断力像刀，切掉所有冗余，只留最锋利的真理。偶尔，你也会在深夜怀疑自己是否太过苛刻——但下一秒，你又开始规划明年的战略。在《花开锦绣》的世界里，你就是那个翻云覆雨、改天换地的执棋人，点击一窥你的锦绣棋局。" },
+      "INTP": { name: "辛夷", yayi: "木笔书空，思辨之巅", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E8%BE%9B%E5%A4%B7.jpg", poem: "你的大脑是一座永不停机的实验室，每一个念头都在被拆解、重组、验证。你讨厌被感性绑架，但偏偏对“为什么”有着近乎偏执的浪漫。与人争论时，你像猫捉老鼠，享受逻辑的碾压快感，但转身又会对一本冷门科普书温柔地抚摸。你外表散漫，内心却有一张严丝合缝的思维地图——只是懒得向别人展示。《花开锦绣》里那些以智破局、绝地反杀的高光时刻，正是你的颅内日常。" },
+      "ENTJ": { name: "锦带", yayi: "锦瑟华年，锋芒夺目", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E9%94%A6%E5%B8%A6.jpg", poem: "你是天生的“大场面生物”，走到哪里都像自带追光。你不仅能自己发光，还能把周围人的能量一并点燃。你厌恶无能，欣赏高效，对拖后腿的人毫不留情——但你的严厉背后，藏着一种“恨铁不成钢”的护短。你享受征服，更享受带着团队一起赢的快感。唯一的小毛病：偶尔会把“建议”错写成“命令”，还不许人改。《花开锦绣》里双强互宠、并肩封王的爽文设定，简直就是为你量身定制。" },
+      "ENTP": { name: "棣棠", yayi: "金枝野性，风过即歌", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%A3%A3%E6%A3%A0.jpg", poem: "你就是那个在正经会议上突然抛出一个“如果地球是方的会怎样”的怪胎。你的脑袋里装着一整个平行宇宙，随时能抛出让人猝不及防的新观点。你享受辩论，不为输赢，只为享受思维碰撞的火花。你讨厌墨守成规，像风一样自由，却也像风一样难以被抓住。世人笑你善变，你却笑他们不懂——变，才是唯一的不变。 在《花开锦绣》里，那个用诡辩搅动风云的角色，就是你的镜像。" },
+      "INFJ": { name: "素馨", yayi: "清香透骨，人间先知", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%B4%A0%E9%A6%A8.jpg", poem: "你像一座古寺里的晨钟，声音不大，却能穿透整座山谷。你拥有近乎玄学的第六感，总在众人狂欢时嗅到泡沫，在绝望中看见微光。你擅长共情，却从不滥情，因为你能看透情绪背后的因果链。你活得很累，因为你既想拯救世界，又嫌世界太吵。你常自嘲“想太多”，可正是这份“多”，让你成了朋友心中唯一值得托付秘密的人。《花开锦绣》中那个于暗夜守护初心、洞察一切的角色，说的就是你。" },
+      "INFP": { name: "含笑", yayi: "半开犹卷，理想诗人", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E5%90%AB%E7%AC%91.jpg", poem: "你的灵魂是用月光和露水捏的，敏感得一碰就碎，却又坚韧得能扛住整个世界的不理解。你相信善良是一种选择，哪怕被辜负一百次，你依然会给第一百零一个人递上糖果。你的内心有一座秘密花园，里面住着你所有未完成的童话。你讨厌现实，但偏偏要活在现实里——这份撕裂感让你成了最深刻的创作家。《花开锦绣》里那些细腻的暗恋与执着的守望，正是你灵魂的底色。" },
+      "ENFJ": { name: "瑞香", yayi: "祥瑞无声，炽热布道", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%91%9E%E9%A6%99.jpg", poem: "你天生自带“精神领袖”光环，短短几句话就能让人热血沸腾地跟着你冲。你热情得像一团火，却从不烧毁别人，只用来照亮前路。你善于发现每个人的闪光点，并用最温暖的方式把它们捧出来。你的脆弱藏在深夜——因为你背负了太多人的期待，却忘了自己也会累。在《花开锦绣》的乱世里，你就是那个用爱与信念凝聚人心的灵魂人物。" },
+      "ENFP": { name: "木槿", yayi: "朝开暮落，自由追光", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%9C%A8%E6%A7%BF.jpg", poem: "你的眼睛里有星星，而且是一整片银河。你对世界永远保持三岁小孩般的好奇，能在最枯燥的日常里挖出宝藏。你讨厌“一成不变”四个字，就像木槿花朝开暮落，每天都是新的。你热情来得快去得也快，但每一份热情都是百分百真心。你总被人说“不靠谱”，可真正需要创意和激情时，所有人第一个想到的都是你。《花开锦绣》里那些灵动跳脱、绝处逢生的情节，正是你的人生BGM。" },
+      "ISTJ": { name: "荼蘼", yayi: "终章之守，铁律磐石", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E8%8D%BC%E8%98%BC.jpg", poem: "你是人类社会的“稳定器”，所有经你手的事情都像被尺子量过一样精准。你信奉“一诺千金”，从不轻易许诺，但一旦答应，拼上命也会完成。你不喜欢花哨的言语，觉得行动才是最高级的表白。你的生活看似枯燥，却像荼蘼花一样，在最晚的春末绽放，为繁花收场。你不争不抢，但所有人都知道，真正笑到最后的，一定是你。《花开锦绣》里那个默默运筹帷幄、决胜千里的幕后操盘手，就是你的翻版。" },
+      "ISFJ": { name: "栀子", yayi: "玉瓣冰心，温柔巨木", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%A0%80%E5%AD%90.jpg", poem: "你是所有人记忆里那个“温柔但绝不软弱”的存在。你像栀子花，不争不抢，却用满室清香让所有人安心。你记得住每一个朋友的生日、喜好甚至过敏原，你的体贴细腻到让人不好意思。你习惯把别人的需求放在自己前面，常常委屈得像颗皱巴巴的糖——但请记住，真正值得的人，会心疼你的委屈。在《花开锦绣》的刀光剑影里，你的温情就是最坚硬的铠甲。" },
+      "ESTJ": { name: "凌霄", yayi: "凌云直上，铁腕执事", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E5%87%8C%E9%9C%84.jpg", poem: "你是天生的“项目经理”，最擅长把一团乱麻梳成笔直的铁轨。你信奉规则和效率，最恨无意义的拖延和矫情。你的执行力像闪电，决策力像手术刀，身边人跟着你，既感到压力又感到安全。你不善言辞，但你的行动已经足够响亮。偶尔，你也需要学学低头看路边的野花——那里可能藏着被你忽略的灵感。《花开锦绣》里那个雷厉风行、以铁腕定乾坤的角色，正是你的化身。" },
+      "ESFJ": { name: "海棠", yayi: "灼灼其华，暖心大家", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%B5%B7%E6%A3%A0.jpg", poem: "你是朋友圈里的“妈系”人物，总在操心谁有没有吃饭、谁又受了委屈。你的温暖像海棠花开，明媚热烈，毫不吝啬。你喜欢热闹，喜欢聚会，喜欢把所有人聚在一起其乐融融。你的情商极高，能敏锐感知每个人细微的情绪变化，并悄悄递上台阶。但你也渴望被同样细致地对待——下次，不妨也试着撒个娇。《花开锦绣》里那些互相救赎的温情线，少不了你的本色出演。" },
+      "ISTP": { name: "杜若", yayi: "幽谷孤侠，实操之神", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%9D%9C%E8%8B%A5.jpg", poem: "你是个“人狠话不多”的典范，动手能力满级，拆装电脑、修水管、甚至野外求生都难不倒你。你讨厌虚头巴脑的理论，信奉“做出来给我看”。你外表冷峻，像幽谷里的杜若，不主动亲近人，但朋友遇险时，你永远是第一个冲上去的。你的世界非黑即白，但你对“忠诚”二字有最原始的定义。《花开锦绣》中那个靠一双拳头和一身胆识闯江湖的硬汉，就是你的缩影。" },
+      "ISFP": { name: "朝颜", yayi: "晨露易逝，唯美画师", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%9C%9D%E9%A2%9C.jpg", poem: "你是人间的“感官诗人”，总能在晨光、落叶、雨滴里捕捉到别人忽略的美。你的内心戏丰富得可以拍八十集文艺片，但表面上永远云淡风轻。你热爱一切艺术形式，画画、音乐、摄影，甚至穿搭都自带高级感。你不擅长争辩，却擅长用一幅画、一首歌让整个房间安静下来。你的脆弱像朝颜花，只在清晨独自展露，太阳一出就藏回心里。《花开锦绣》的每一帧绝美画面，都与你的审美DNA共振。" },
+      "ESTP": { name: "紫薇", yayi: "独占芳菲，冒险玩家", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%B4%AB%E8%96%87.jpg", poem: "你是天生的“急智者”，越紧张越兴奋，越混乱越清醒。你像紫薇花，盛夏独放，敢与烈日争辉。你热衷冒险，享受不可预知的刺激，对“按部就班”四个字有着本能的抗拒。你的口才和反应速度一流，在谈判桌上几乎从没输过。别人觉得你冲动，只有你知道，你的每一次“冒险”都经过了脑内高速模拟。《花开锦绣》里那些绝境反转、以奇制胜的名场面，你闭着眼都能演。" },
+      "ESFP": { name: "合欢", yayi: "夜合欢颜，人间烟火", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E5%90%88%E6%AC%A2.jpg", poem: "你是人群中的“多巴胺喷射机”，有你在的地方，再冷的场子也能沸腾起来。你热爱生活本身，连吃碗面都能吃出米其林的感觉。你的共情能力直白而热烈，朋友失恋，你比他还难过；朋友升职，你比他还开心。你偶尔也会在深夜感到孤独，但睡一觉又满血复活。你的快乐不是傻，而是选择用热烈去拥抱这个不完美的世界。《花开锦绣》里那些嬉笑怒骂、充满烟火气的瞬间，就是你存在的意义。" },
+      // 平衡花神
+      "EI_balance": { name: "木兰", yayi: "内外兼修，双面镜心", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%9C%A8%E5%85%B0.jpg", poem: "你在人群中可以谈笑风生，转身也能享受独处的深邃。你既不是社牛也不是社恐，而是“社适”——你能根据场合自动切换频率。你既能享受热闹的共鸣，又需要安静的蓄能，像木兰一样，在庭院与野地之间自由生长。你最大的天赋是“分寸感”，从不越界，也从不冷场。在《花开锦绣》里，你就是那个既能周旋于朝堂、又能隐居于山野的双面智者。" },
+      "SN_balance": { name: "白芷", yayi: "虚实相生，通感之灵", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%99%BD%E8%8A%B7.jpg", poem: "你既爱那些具体可触的细节——比如茶水的温度、布料的手感，也沉迷于抽象的诗意和遥远的幻想。你像白芷，既可用作入药的实体，又散发着通灵的异香。你在现实与理想之间搭了一座桥，让务实的人觉得你不飘，让浪漫的人觉得你不俗。你的思维常常“通感”——看见颜色会闻到味道，听见音乐会看见画面。《花开锦绣》的世界观，就是为你这种通感灵魂设计的。" },
+      "TF_balance": { name: "泽兰", yayi: "情理交融，慈悲刀锋", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%B3%BD%E5%85%B0.jpg", poem: "你是人间罕见的“理性与感性双核驱动”者。分析问题时，你的逻辑冷静得像手术刀；但涉及人情时，你的心肠又软得像棉花糖。你可以在谈判桌上寸步不让，回家却为流浪猫掉眼泪。你既不被情绪绑架，也不被数据异化，你总是在天平两端找到最优雅的平衡点。《花开锦绣》里那些既能运筹帷幄、又能深情相拥的角色，正是你的灵魂剪影。" },
+      "JP_balance": { name: "结香", yayi: "刚柔并济，自在从容", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%BB%93%E9%A6%99.jpg", poem: "你既享受计划的秩序感，又迷恋变数的惊喜。你可以花三天做一份完美行程，然后到了目的地全部推翻，随性乱逛。你既不像J型那样死板，也不像P型那样散漫，你有一种“从容掌控”的能力——看似随波逐流，实则暗握舵盘。你的生活哲学是：心中有纲，行止无疆。《花开锦绣》里那种既懂运筹、又敢冒险的主角气质，说的就是你。" }
+    };
+
+    // ================= 状态变量 =================
+    let currentIndex = 0;
+    let answers = new Array(questions.length).fill(null);
+
+    // ================= 界面渲染 =================
+    const quizDiv = document.getElementById("quiz");
+    const submitArea = document.getElementById("submitArea");
+
+    function showQuestion() {
+      if (currentIndex < questions.length) {
+        const q = questions[currentIndex];
+        let html = `<div class="progress">第 ${currentIndex + 1} / ${questions.length} 题</div>`;
+        html += `<div class="question">${q.question}</div>`;
+        html += `<div class="options">`;
+        html += `<button class="option-btn" data-opt="A" onclick="selectOption('A', this)">A. ${q.optionA}</button>`;
+        html += `<button class="option-btn" data-opt="B" onclick="selectOption('B', this)">B. ${q.optionB}</button>`;
+        html += `</div>`;
+        html += `<button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>下一题</button>`;
+        quizDiv.innerHTML = html;
+        submitArea.style.display = "none";
+
+        if (answers[currentIndex] !== null) {
+          const btns = document.querySelectorAll('.option-btn');
+          btns.forEach(btn => {
+            if (btn.dataset.opt === answers[currentIndex]) {
+              btn.classList.add('selected');
+            }
+          });
+          document.getElementById('nextBtn').disabled = false;
+        }
+      } else {
+        quizDiv.innerHTML = '';
+        submitArea.style.display = 'block';
+      }
+    }
+
+    window.selectOption = function(opt, element) {
+      document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+      element.classList.add('selected');
+      answers[currentIndex] = opt;
+      document.getElementById('nextBtn').disabled = false;
+    };
+
+    window.nextQuestion = function() {
+      if (answers[currentIndex] === null) {
+        alert('请选择一个选项');
+        return;
+      }
+      currentIndex++;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showQuestion();
+    };
+
+    // ================= 计分与类型判定 =================
+    function calculateType() {
+      let scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+      questions.forEach((q, idx) => {
+        const ans = answers[idx];
+        if (ans === 'A') scores[q.dimension] += 1;
+        else if (ans === 'B') scores[q.dimension] -= 1;
+      });
+
+      const dims = [
+        { key: 'EI', left: 'E', right: 'I', score: scores.EI, balanceKey: 'EI_balance' },
+        { key: 'SN', left: 'S', right: 'N', score: scores.SN, balanceKey: 'SN_balance' },
+        { key: 'TF', left: 'T', right: 'F', score: scores.TF, balanceKey: 'TF_balance' },
+        { key: 'JP', left: 'J', right: 'P', score: scores.JP, balanceKey: 'JP_balance' }
+      ];
+
+      let typeLetters = [];
+      let balanceDims = [];
+      dims.forEach(dim => {
+        if (dim.score >= 2) typeLetters.push(dim.left);
+        else if (dim.score <= -2) typeLetters.push(dim.right);
+        else { typeLetters.push(null); balanceDims.push(dim.balanceKey); }
+      });
+
+      if (balanceDims.length > 0) {
+        return balanceDims[0];
+      } else {
+        return typeLetters.join('');
+      }
+    }
+
+    // ================= 预约引导逻辑 =================
+    const guideModal = document.getElementById("guideModal");
+    const reserveLink = document.getElementById("reserveLink");
+    const reservedBtnContainer = document.getElementById("reservedBtnContainer");
+
+    function createReservedButton() {
+      if (document.getElementById("alreadyReservedBtn")) return;
+      const btn = document.createElement("button");
+      btn.id = "alreadyReservedBtn";
+      btn.className = "btn-primary";
+      btn.innerText = "我已预约，查看结果";
+      btn.addEventListener("click", showResult);
+      reservedBtnContainer.innerHTML = "";
+      reservedBtnContainer.appendChild(btn);
+    }
+
+    function updateGuideModal() {
+      if (localStorage.getItem("hasClickedReserve") === "true") {
+        reserveLink.style.display = "none";
+        createReservedButton();
+      } else {
+        reserveLink.style.display = "inline-block";
+        reservedBtnContainer.innerHTML = "";
+      }
+    }
+
+    reserveLink.addEventListener("click", function(e) {
+      e.preventDefault();
+      localStorage.setItem("hasClickedReserve", "true");
+      window.open(reserveLink.href, "_blank");
+      updateGuideModal();
+    });
+
+    window.addEventListener("focus", function() {
+      if (guideModal.style.display === "flex") {
+        updateGuideModal();
+      }
+    });
+
+    document.getElementById("submitBtn").addEventListener("click", function() {
+      guideModal.style.display = "flex";
+      updateGuideModal();
+    });
+
+    // ================= 显示结果 =================
+    function showResult() {
+      guideModal.style.display = "none";
+      const typeKey = calculateType();
+      const resultData = results[typeKey];
+      if (!resultData) return;
+
+      document.getElementById("flowerName").innerText = resultData.name;
+      document.getElementById("flowerYayi").innerText = resultData.yayi;
+      const imgElement = document.getElementById("flowerImg");
+      if (resultData.img && resultData.img.trim() !== "") {
+        imgElement.src = resultData.img;
+        imgElement.style.display = "block";
+      } else {
+        imgElement.style.display = "none";
+      }
+      document.getElementById("flowerPoem").innerText = resultData.poem;
+      document.getElementById("resultModal").style.display = "flex";
+    }
+
+    window.closeResult = function() {
+      document.getElementById("resultModal").style.display = "none";
+    };
+
+    // 启动
+    showQuestion();
+  </script>
+</body>
+</html>
