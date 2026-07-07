@@ -8,210 +8,65 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #fce4ec, #f3e5f5);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      margin: 0; padding: 0;
+      display: flex; justify-content: center; align-items: center; min-height: 100vh;
     }
-
     .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      max-width: 600px;
-      width: 90%;
-      text-align: center;
-      position: relative;
+      background: white; padding: 2rem; border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 600px; width: 90%; text-align: center;
     }
-
     h1 { color: #e91e63; margin-bottom: 0.5rem; }
-
-    .progress {
-      font-size: 0.9rem;
-      color: #999;
-      margin-bottom: 1.5rem;
-    }
-
-    .question {
-      margin: 1.5rem 0;
-      font-size: 1.1rem;
-      font-weight: 500;
-      line-height: 1.6;
-    }
-
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      margin: 1.5rem 0;
-    }
-
+    .progress { font-size: 0.9rem; color: #999; margin-bottom: 1.5rem; }
+    .question { margin: 1.5rem 0; font-size: 1.1rem; font-weight: 500; line-height: 1.6; }
+    .options { display: flex; flex-direction: column; gap: 0.8rem; margin: 1.5rem 0; }
     .option-btn {
-      background: #fff0f5;
-      border: 2px solid #f8bbd0;
-      border-radius: 25px;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: left;
-      color: #333;
+      background: #fff0f5; border: 2px solid #f8bbd0; border-radius: 25px;
+      padding: 0.9rem 1.5rem; font-size: 1rem; cursor: pointer; transition: all 0.2s;
+      text-align: left; color: #333;
     }
-
-    .option-btn:hover {
-      background: #fce4ec;
-      border-color: #e91e63;
-    }
-
-    .option-btn.selected {
-      background: #e91e63;
-      color: white;
-      border-color: #e91e63;
-    }
-
+    .option-btn:hover { background: #fce4ec; border-color: #e91e63; }
+    .option-btn.selected { background: #e91e63; color: white; border-color: #e91e63; }
     .next-btn, .btn-link, .btn-primary {
-      background: #e91e63;
-      color: white;
-      border: none;
-      padding: 0.8rem 2rem;
-      border-radius: 30px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin: 0.5rem;
-      text-decoration: none;
-      display: inline-block;
-      transition: background 0.2s;
+      background: #e91e63; color: white; border: none; padding: 0.8rem 2rem;
+      border-radius: 30px; font-size: 1rem; cursor: pointer; margin: 0.5rem;
+      text-decoration: none; display: inline-block; transition: background 0.2s;
     }
-
-    .next-btn:disabled {
-      background: #ddd;
-      cursor: not-allowed;
-    }
-
+    .next-btn:disabled { background: #ddd; cursor: not-allowed; }
     .btn-link { background: #ff9800; }
     .btn-primary { background: #4caf50; }
-
     .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-      padding: 1rem;
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); justify-content: center; align-items: center;
+      z-index: 10; padding: 1rem;
     }
-
     .modal-content {
-      background: white;
-      border-radius: 24px;
-      max-width: 480px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 2rem 1.5rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      margin: auto;
+      background: white; border-radius: 24px; max-width: 480px; width: 100%;
+      max-height: 90vh; overflow-y: auto; padding: 2rem 1.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; margin: auto;
     }
-
-    .result-header {
-      font-size: 2.2rem;
-      color: #e91e63;
-      font-weight: bold;
-      margin-bottom: 0.2rem;
-      letter-spacing: 2px;
-    }
-
-    .result-subtitle {
-      font-size: 1.1rem;
-      color: #888;
-      font-style: italic;
-      margin-bottom: 1.5rem;
-    }
-
-    .flower-img-wrapper {
-      width: 80%;
-      max-width: 280px;
-      margin: 0 auto 1.5rem;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(233, 30, 99, 0.15);
-    }
-
-    .flower-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-    }
-
+    .result-header { font-size: 2.2rem; color: #e91e63; font-weight: bold; margin-bottom: 0.2rem; letter-spacing: 2px; }
+    .result-subtitle { font-size: 1.1rem; color: #888; font-style: italic; margin-bottom: 1.5rem; }
+    .flower-img-wrapper { width: 80%; max-width: 280px; margin: 0 auto 1.5rem; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 25px rgba(233,30,99,0.15); }
+    .flower-img { width: 100%; height: auto; display: block; aspect-ratio: 1/1; object-fit: cover; }
     .result-poem {
-      background: #fff9fb;
-      border-left: 5px solid #e91e63;
-      padding: 1rem 1.2rem;
-      margin: 1.5rem 0;
-      text-align: left;
-      line-height: 1.7;
-      font-size: 0.92rem;
-      color: #444;
-      border-radius: 12px;
-      white-space: pre-wrap;
-      word-break: break-word;
+      background: #fff9fb; border-left: 5px solid #e91e63; padding: 1rem 1.2rem;
+      margin: 1.5rem 0; text-align: left; line-height: 1.7; font-size: 0.92rem;
+      color: #444; border-radius: 12px; white-space: pre-wrap; word-break: break-word;
     }
-
     .convert-link {
-      display: block;
-      background: linear-gradient(135deg, #e91e63, #c2185b);
-      color: white;
-      padding: 0.9rem;
-      border-radius: 30px;
-      text-decoration: none;
-      margin-top: 1.5rem;
-      font-weight: bold;
-      font-size: 1rem;
-      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
+      display: block; background: linear-gradient(135deg, #e91e63, #c2185b);
+      color: white; padding: 0.9rem; border-radius: 30px; text-decoration: none;
+      margin-top: 1.5rem; font-weight: bold; font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(233,30,99,0.3); transition: transform 0.2s, box-shadow 0.2s;
     }
-
-    .convert-link:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
-    }
-
-    .convert-hint {
-      font-size: 0.8rem;
-      color: #999;
-      margin: 0.5rem 0 1rem;
-      font-style: italic;
-    }
-
-    .action-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 0.8rem;
-      margin-top: 0.5rem;
-    }
-
+    .convert-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233,30,99,0.4); }
+    .convert-hint { font-size: 0.8rem; color: #999; margin: 0.5rem 0 1rem; font-style: italic; }
+    .action-buttons { display: flex; justify-content: center; gap: 0.8rem; margin-top: 0.5rem; }
     .action-buttons button {
-      background: #f5f5f5;
-      border: none;
-      padding: 0.6rem 1.5rem;
-      border-radius: 25px;
-      font-size: 0.9rem;
-      color: #555;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: #f5f5f5; border: none; padding: 0.6rem 1.5rem; border-radius: 25px;
+      font-size: 0.9rem; color: #555; cursor: pointer; transition: background 0.2s;
     }
-
-    .action-buttons button:hover {
-      background: #e0e0e0;
-    }
+    .action-buttons button:hover { background: #e0e0e0; }
   </style>
 </head>
 <body>
@@ -224,7 +79,6 @@
     </div>
   </div>
 
-  <!-- 预约引导弹窗 -->
   <div id="guideModal" class="modal">
     <div class="modal-content">
       <h2>马上揭晓！</h2>
@@ -234,7 +88,6 @@
     </div>
   </div>
 
-  <!-- 结果展示弹窗 -->
   <div id="resultModal" class="modal">
     <div class="modal-content">
       <div class="result-header" id="flowerName"></div>
@@ -255,96 +108,96 @@
   </div>
 
   <script>
-    // ================= 题目数据（新10题，4选项） =================
+    // ================= 题目数据 =================
     const questions = [
       {
         question: "周末下午，你刚结束一周的工作，你最想做什么？",
         options: [
-          { text: "约朋友去新开的咖啡馆打卡，聊聊天拍拍照", score: { EI: 1 } },       // +E
-          { text: "一个人窝在沙发里，刷剧、发呆、什么也不想", score: { EI: -1 } },  // +I
-          { text: "打开地图搜一个没去过的地方，来一场说走就走的City Walk", score: { SN: -1 } }, // +N
-          { text: "把下周的行程表排好，顺便把房间彻底收拾一遍", score: { JP: 1 } }   // +J
+          { text: "约朋友去新开的咖啡馆打卡，聊聊天拍拍照", score: { EI: 1 } },
+          { text: "一个人窝在沙发里，刷剧、发呆、什么也不想", score: { EI: -1 } },
+          { text: "打开地图搜一个没去过的地方，来一场说走就走的City Walk", score: { SN: -1 } },
+          { text: "把下周的行程表排好，顺便把房间彻底收拾一遍", score: { JP: 1 } }
         ]
       },
       {
         question: "你在刷手机时看到一篇很长的深度文章，点开后你会？",
         options: [
-          { text: "快速扫一遍小标题和加粗句，先抓住核心结论", score: { TF: 1 } },      // +T
-          { text: "从头读到尾，甚至会被某句话击中，反复看几遍", score: { SN: -1 } },  // +N
-          { text: "先收藏起来，告诉自己“有空再看”，然后就忘了", score: { JP: -1 } }, // +P
-          { text: "看到一半就跳到评论区，先看看别人怎么说的", score: { EI: 1 } }      // +E
+          { text: "快速扫一遍小标题和加粗句，先抓住核心结论", score: { TF: 1 } },
+          { text: "从头读到尾，甚至会被某句话击中，反复看几遍", score: { SN: -1 } },
+          { text: "先收藏起来，告诉自己“有空再看”，然后就忘了", score: { JP: -1 } },
+          { text: "看到一半就跳到评论区，先看看别人怎么说的", score: { EI: 1 } }
         ]
       },
       {
         question: "你在团队项目里发现同事的方案有明显漏洞，你会怎么做？",
         options: [
-          { text: "直接指出来，用数据和逻辑说明为什么不可行", score: { TF: 1 } },      // +T
-          { text: "私下找他说，怕当众让他难堪，措辞反复斟酌", score: { TF: -1 } },     // +F
-          { text: "先不说，等他自己发现，或者等出了问题再解决", score: { JP: -1 } },  // +P
-          { text: "在群里发一条“我有个想法，大家帮我看看”，把问题包装成讨论", score: { EI: 1 } } // +E
+          { text: "直接指出来，用数据和逻辑说明为什么不可行", score: { TF: 1 } },
+          { text: "私下找他说，怕当众让他难堪，措辞反复斟酌", score: { TF: -1 } },
+          { text: "先不说，等他自己发现，或者等出了问题再解决", score: { JP: -1 } },
+          { text: "在群里发一条“我有个想法，大家帮我看看”，把问题包装成讨论", score: { EI: 1 } }
         ]
       },
       {
         question: "你正在规划一次期待已久的旅行，你的风格是？",
         options: [
-          { text: "精确到小时的行程表，酒店、交通、餐厅全部提前预订", score: { JP: 1 } }, // +J
-          { text: "只订机票和第一晚的酒店，剩下的到了再说", score: { JP: -1 } },        // +P
-          { text: "看了一堆攻略和攻略视频，收藏了几十个地点，但一个都没定", score: { SN: 1 } }, // +S
-          { text: "先发个朋友圈问“有没有人去过这里”，等朋友推荐再决定", score: { EI: 1 } }    // +E
+          { text: "精确到小时的行程表，酒店、交通、餐厅全部提前预订", score: { JP: 1 } },
+          { text: "只订机票和第一晚的酒店，剩下的到了再说", score: { JP: -1 } },
+          { text: "看了一堆攻略和攻略视频，收藏了几十个地点，但一个都没定", score: { SN: 1 } },
+          { text: "先发个朋友圈问“有没有人去过这里”，等朋友推荐再决定", score: { EI: 1 } }
         ]
       },
       {
         question: "你刚进一家新公司，中午同事们叫你一起吃饭，你会？",
         options: [
-          { text: "有点紧张但还是会去，想尽快融入大家", score: { EI: -1 } },       // +I
-          { text: "心里想去，嘴上说“你们先去吧”，等别人再叫一次才动", score: { TF: -1 } }, // +F
-          { text: "借故推掉，自己点个外卖，觉得社交好累", score: { EI: -1 } },      // +I
-          { text: "主动提议去某某餐厅，说“我知道附近有一家特别好吃”", score: { EI: 1 } }  // +E
+          { text: "有点紧张但还是会去，想尽快融入大家", score: { EI: -1 } },
+          { text: "心里想去，嘴上说“你们先去吧”，等别人再叫一次才动", score: { TF: -1 } },
+          { text: "借故推掉，自己点个外卖，觉得社交好累", score: { EI: -1 } },
+          { text: "主动提议去某某餐厅，说“我知道附近有一家特别好吃”", score: { EI: 1 } }
         ]
       },
       {
         question: "半夜失眠，你躺在床上脑子里最常出现的是？",
         options: [
-          { text: "一些抽象的念头——人生意义、时间流逝、宇宙有多大", score: { SN: -1 } },  // +N
-          { text: "今天发生的某件事的具体画面——谁说了什么话、哪个表情", score: { SN: 1 } }, // +S
-          { text: "明天要做的事情清单，一件一件在脑子里过", score: { JP: 1 } },          // +J
-          { text: "一个很久没联系的人，突然想起他/她的样子", score: { TF: -1 } }         // +F
+          { text: "一些抽象的念头——人生意义、时间流逝、宇宙有多大", score: { SN: -1 } },
+          { text: "今天发生的某件事的具体画面——谁说了什么话、哪个表情", score: { SN: 1 } },
+          { text: "明天要做的事情清单，一件一件在脑子里过", score: { JP: 1 } },
+          { text: "一个很久没联系的人，突然想起他/她的样子", score: { TF: -1 } }
         ]
       },
       {
         question: "你的手机里突然弹出一条陌生人的求助私信，看起来很紧急，你会？",
         options: [
-          { text: "立刻回复，问清楚情况，看自己能帮上什么忙", score: { EI: 1 } },        // +E
-          { text: "先确认对方身份，观察一下是不是骗子，再决定", score: { TF: 1 } },      // +T
-          { text: "截图发给朋友问“你觉得这是真的假的”", score: { TF: -1 } },            // +F
-          { text: "心里很纠结，想帮忙又怕惹麻烦，最终没回", score: { JP: -1 } }          // +P
+          { text: "立刻回复，问清楚情况，看自己能帮上什么忙", score: { EI: 1 } },
+          { text: "先确认对方身份，观察一下是不是骗子，再决定", score: { TF: 1 } },
+          { text: "截图发给朋友问“你觉得这是真的假的”", score: { TF: -1 } },
+          { text: "心里很纠结，想帮忙又怕惹麻烦，最终没回", score: { JP: -1 } }
         ]
       },
       {
         question: "你参加一个聚会，中途去了趟洗手间，回来发现大家换了个新话题聊得火热，你会？",
         options: [
-          { text: "自然地走回座位，问一句“聊什么呢？我也要听”", score: { EI: 1 } },      // +E
-          { text: "在旁边安静坐下，等找到合适的时机再插话", score: { EI: -1 } },         // +I
-          { text: "觉得有点被冷落，掏出手机假装有事刷一下", score: { TF: -1 } },         // +F
-          { text: "主动把话题拉回刚才聊的内容，说“我们刚才还没聊完呢”", score: { JP: 1 } } // +J
+          { text: "自然地走回座位，问一句“聊什么呢？我也要听”", score: { EI: 1 } },
+          { text: "在旁边安静坐下，等找到合适的时机再插话", score: { EI: -1 } },
+          { text: "觉得有点被冷落，掏出手机假装有事刷一下", score: { TF: -1 } },
+          { text: "主动把话题拉回刚才聊的内容，说“我们刚才还没聊完呢”", score: { JP: 1 } }
         ]
       },
       {
         question: "你发现自己最近总是不开心，你会如何应对？",
         options: [
-          { text: "分析原因：是工作、关系还是身体状态？一项项排查", score: { TF: 1 } },    // +T
-          { text: "找最信任的朋友或伴侣倾诉，说出来会好受些", score: { TF: -1 } },        // +F
-          { text: "自己扛着，做点别的事情转移注意力，等它过去", score: { JP: -1 } },      // +P
-          { text: "开始写日记或发仅自己可见的微博，把情绪变成文字", score: { SN: -1 } }    // +N
+          { text: "分析原因：是工作、关系还是身体状态？一项项排查", score: { TF: 1 } },
+          { text: "找最信任的朋友或伴侣倾诉，说出来会好受些", score: { TF: -1 } },
+          { text: "自己扛着，做点别的事情转移注意力，等它过去", score: { JP: -1 } },
+          { text: "开始写日记或发仅自己可见的微博，把情绪变成文字", score: { SN: -1 } }
         ]
       },
       {
         question: "你看到“花开锦绣”这四个字时，最先联想到的是？",
         options: [
-          { text: "一部制作精良的古装剧，服化道应该很美", score: { SN: 1 } },             // +S
-          { text: "一种人生状态——努力了很久，终于迎来最好的时候", score: { JP: 1 } },    // +J
-          { text: "某个具体的画面：满院繁花，阳光正好", score: { TF: -1 } },              // +F
-          { text: "一个故事的开头，像是命运用这四个字在敲门", score: { SN: -1 } }          // +N
+          { text: "一部制作精良的古装剧，服化道应该很美", score: { SN: 1 } },
+          { text: "一种人生状态——努力了很久，终于迎来最好的时候", score: { JP: 1 } },
+          { text: "某个具体的画面：满院繁花，阳光正好", score: { TF: -1 } },
+          { text: "一个故事的开头，像是命运用这四个字在敲门", score: { SN: -1 } }
         ]
       }
     ];
@@ -373,12 +226,41 @@
       "JP_balance": { name: "结香", yayi: "刚柔并济，自在从容", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%BB%93%E9%A6%99.jpg", poem: "你既享受计划的秩序感，又迷恋变数的惊喜。你可以花三天做一份完美行程，然后到了目的地全部推翻，随性乱逛。你既不像J型那样死板，也不像P型那样散漫，你有一种“从容掌控”的能力——看似随波逐流，实则暗握舵盘。你的生活哲学是：心中有纲，行止无疆。《花开锦绣》里那种既懂运筹、又敢冒险的主角气质，说的就是你。" }
     };
 
+    // ================= 预处理：每个维度涉及的题目索引 =================
+    const dimQuestions = { EI: [], SN: [], TF: [], JP: [] };
+    questions.forEach((q, idx) => {
+      q.options.forEach(opt => {
+        for (let dim in opt.score) {
+          if (dimQuestions[dim].indexOf(idx) === -1) {
+            dimQuestions[dim].push(idx);
+          }
+        }
+      });
+    });
+
+    // 计算某维度的次级倾向得分（-1..1）
+    function calcSubScore(dim) {
+      const relatedIndices = dimQuestions[dim];
+      let pos = 0, neg = 0;
+      relatedIndices.forEach(i => {
+        const ans = answers[i];
+        if (!ans) return;
+        const optIndex = ['A','B','C','D'].indexOf(ans);
+        const chosenScore = questions[i].options[optIndex].score;
+        if (chosenScore.hasOwnProperty(dim)) {
+          if (chosenScore[dim] === 1) pos++;
+          else if (chosenScore[dim] === -1) neg++;
+        }
+      });
+      const total = pos + neg;
+      return total > 0 ? (pos - neg) / total : 0;
+    }
+
     // ================= 状态变量 =================
     let currentIndex = 0;
     let answers = new Array(questions.length).fill(null);
     let scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
 
-    // ================= 持久化存储 =================
     function loadState() {
       const savedAnswers = localStorage.getItem('quizAnswers');
       const savedScores = localStorage.getItem('quizScores');
@@ -389,9 +271,7 @@
           scores = JSON.parse(savedScores);
           currentIndex = parseInt(savedIndex, 10);
           if (answers.length !== questions.length) throw new Error('invalid');
-        } catch(e) {
-          resetState();
-        }
+        } catch(e) { resetState(); }
       }
     }
 
@@ -413,7 +293,6 @@
 
     loadState();
 
-    // ================= 界面渲染 =================
     const quizDiv = document.getElementById("quiz");
     const submitArea = document.getElementById("submitArea");
 
@@ -421,23 +300,17 @@
       if (currentIndex < questions.length) {
         const q = questions[currentIndex];
         let html = `<div class="progress">第 ${currentIndex + 1} / ${questions.length} 题</div>`;
-        html += `<div class="question">${q.question}</div>`;
-        html += `<div class="options">`;
-        const labels = ['A', 'B', 'C', 'D'];
+        html += `<div class="question">${q.question}</div><div class="options">`;
+        const labels = ['A','B','C','D'];
         q.options.forEach((opt, idx) => {
           html += `<button class="option-btn" data-opt="${labels[idx]}" onclick="selectOption('${labels[idx]}', this)">${labels[idx]}. ${opt.text}</button>`;
         });
-        html += `</div>`;
-        html += `<button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>下一题</button>`;
+        html += `</div><button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>下一题</button>`;
         quizDiv.innerHTML = html;
         submitArea.style.display = "none";
-
         if (answers[currentIndex] !== null) {
-          const btns = document.querySelectorAll('.option-btn');
-          btns.forEach(btn => {
-            if (btn.dataset.opt === answers[currentIndex]) {
-              btn.classList.add('selected');
-            }
+          document.querySelectorAll('.option-btn').forEach(btn => {
+            if (btn.dataset.opt === answers[currentIndex]) btn.classList.add('selected');
           });
           document.getElementById('nextBtn').disabled = false;
         }
@@ -455,44 +328,91 @@
     };
 
     window.nextQuestion = function() {
-      if (answers[currentIndex] === null) {
-        alert('请选择一个选项');
-        return;
-      }
-      // 累加分数：根据该题该选项的 score 对象更新维度分数
+      if (answers[currentIndex] === null) { alert('请选择一个选项'); return; }
       const q = questions[currentIndex];
-      const opt = answers[currentIndex]; // 'A','B','C','D'
+      const opt = answers[currentIndex];
       const scoreDelta = q.options[['A','B','C','D'].indexOf(opt)].score;
-      for (let dim in scoreDelta) {
-        scores[dim] += scoreDelta[dim];
-      }
-
+      for (let dim in scoreDelta) scores[dim] += scoreDelta[dim];
       currentIndex++;
       saveState();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showQuestion();
     };
 
-    // ================= 计分与类型判定 =================
+    // ================= 核心：计算类型（新逻辑） =================
     function calculateType() {
       const dims = [
-        { key: 'EI', left: 'E', right: 'I', score: scores.EI, balanceKey: 'EI_balance' },
-        { key: 'SN', left: 'S', right: 'N', score: scores.SN, balanceKey: 'SN_balance' },
-        { key: 'TF', left: 'T', right: 'F', score: scores.TF, balanceKey: 'TF_balance' },
-        { key: 'JP', left: 'J', right: 'P', score: scores.JP, balanceKey: 'JP_balance' }
+        { key: 'EI', left: 'E', right: 'I', balanceKey: 'EI_balance' },
+        { key: 'SN', left: 'S', right: 'N', balanceKey: 'SN_balance' },
+        { key: 'TF', left: 'T', right: 'F', balanceKey: 'TF_balance' },
+        { key: 'JP', left: 'J', right: 'P', balanceKey: 'JP_balance' }
       ];
-      let typeLetters = [];
-      let balanceDims = [];
-      dims.forEach(dim => {
-        if (dim.score >= 2) typeLetters.push(dim.left);
-        else if (dim.score <= -2) typeLetters.push(dim.right);
-        else { typeLetters.push(null); balanceDims.push(dim.balanceKey); }
-      });
-      if (balanceDims.length > 0) {
-        return balanceDims[0];
-      } else {
-        return typeLetters.join('');
+
+      // 判断平衡维度
+      const balanced = dims.filter(d => Math.abs(scores[d.key]) < 2);
+      const nonBalanced = dims.filter(d => Math.abs(scores[d.key]) >= 2);
+
+      // 如果没有平衡维度，直接返回标准型
+      if (balanced.length === 0) {
+        return nonBalanced.map(d => scores[d.key] >= 2 ? d.left : d.right).join('');
       }
+
+      // 如果恰好一个平衡维度，返回平衡花神
+      if (balanced.length === 1) {
+        return balanced[0].balanceKey;
+      }
+
+      // 多个平衡维度（≥2），执行加权回溯归入标准型
+      // 先对非平衡维度确定字母
+      const decisions = {}; // dim -> letter
+      nonBalanced.forEach(d => {
+        decisions[d.key] = scores[d.key] >= 2 ? d.left : d.right;
+      });
+
+      // 对每个平衡维度计算次级倾向
+      const subScores = {};
+      balanced.forEach(d => {
+        subScores[d.key] = calcSubScore(d.key);
+      });
+
+      // 收集尚未确定字母的维度（平衡维度）
+      const pending = balanced.map(d => d.key); // 顺序按 dims 优先级
+
+      // 递归确定：每次取次级得分绝对值最大的维度破平
+      while (pending.length > 0) {
+        // 找出 pending 中绝对值最大的维度（优先级用于并列）
+        let bestDim = null;
+        let bestAbs = -1;
+        pending.forEach(dim => {
+          const abs = Math.abs(subScores[dim]);
+          if (abs > bestAbs) {
+            bestAbs = abs;
+            bestDim = dim;
+          } else if (abs === bestAbs) {
+            // 并列时按优先级 EI > SN > TF > JP
+            if (dims.findIndex(d => d.key === dim) < dims.findIndex(d => d.key === bestDim)) {
+              bestDim = dim;
+            }
+          }
+        });
+
+        // 确定 bestDim 的字母
+        const sub = subScores[bestDim];
+        if (sub > 0) {
+          decisions[bestDim] = dims.find(d => d.key === bestDim).left;
+        } else if (sub < 0) {
+          decisions[bestDim] = dims.find(d => d.key === bestDim).right;
+        } else {
+          // 次级得分也为0，强制设为正向（left）
+          decisions[bestDim] = dims.find(d => d.key === bestDim).left;
+        }
+        // 从 pending 移除
+        const index = pending.indexOf(bestDim);
+        pending.splice(index, 1);
+      }
+
+      // 按 dims 顺序组合四字母
+      return dims.map(d => decisions[d.key]).join('');
     }
 
     // ================= 预约引导逻辑 =================
@@ -529,9 +449,7 @@
     });
 
     window.addEventListener("focus", function() {
-      if (guideModal.style.display === "flex") {
-        updateGuideModal();
-      }
+      if (guideModal.style.display === "flex") updateGuideModal();
     });
 
     document.getElementById("submitBtn").addEventListener("click", function() {
@@ -544,7 +462,6 @@
       }
     });
 
-    // ================= 显示结果 =================
     function showResult() {
       guideModal.style.display = "none";
       let typeKey = localStorage.getItem('quizResultType');
@@ -554,7 +471,6 @@
       }
       const resultData = results[typeKey];
       if (!resultData) return;
-
       document.getElementById("flowerName").innerText = resultData.name;
       document.getElementById("flowerYayi").innerText = resultData.yayi;
       const imgElement = document.getElementById("flowerImg");
@@ -572,7 +488,6 @@
       document.getElementById("resultModal").style.display = "none";
     };
 
-    // ================= 初始化：检查是否可直接展示结果 =================
     function checkAutoShowResult() {
       if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true') {
         quizDiv.innerHTML = '';
