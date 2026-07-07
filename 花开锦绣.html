@@ -94,7 +94,6 @@
     .btn-link { background: #ff9800; }
     .btn-primary { background: #4caf50; }
 
-    /* ---------- 弹窗通用 ---------- */
     .modal {
       display: none;
       position: fixed;
@@ -120,7 +119,6 @@
       margin: auto;
     }
 
-    /* ---------- 结果弹窗样式 ---------- */
     .result-header {
       font-size: 2.2rem;
       color: #e91e63;
@@ -136,7 +134,6 @@
       margin-bottom: 1.5rem;
     }
 
-    /* 图片容器：放大图片，圆角卡片风格 */
     .flower-img-wrapper {
       width: 80%;
       max-width: 280px;
@@ -150,11 +147,10 @@
       width: 100%;
       height: auto;
       display: block;
-      aspect-ratio: 1 / 1;  /* 正方形，可改为 auto 自适应 */
+      aspect-ratio: 1 / 1;
       object-fit: cover;
     }
 
-    /* 判词区：紧凑但清晰 */
     .result-poem {
       background: #fff9fb;
       border-left: 5px solid #e91e63;
@@ -169,7 +165,6 @@
       word-break: break-word;
     }
 
-    /* 转化引导按钮 */
     .convert-link {
       display: block;
       background: linear-gradient(135deg, #e91e63, #c2185b);
@@ -229,7 +224,7 @@
     </div>
   </div>
 
-  <!-- 预约引导弹窗（保持不变） -->
+  <!-- 预约引导弹窗 -->
   <div id="guideModal" class="modal">
     <div class="modal-content">
       <h2>马上揭晓！</h2>
@@ -239,7 +234,7 @@
     </div>
   </div>
 
-  <!-- 结果展示弹窗（结构优化：增加图片容器，底部按钮分组） -->
+  <!-- 结果展示弹窗 -->
   <div id="resultModal" class="modal">
     <div class="modal-content">
       <div class="result-header" id="flowerName"></div>
@@ -254,7 +249,8 @@
       <p class="convert-hint">花有千种，命有万变，唯有你的选择，能让锦绣成真。</p>
       <div class="action-buttons">
         <button onclick="closeResult()">关闭</button>
-        <button onclick="location.reload()">再测一次</button>
+        <!-- 再测一次：清除所有状态后刷新 -->
+        <button onclick="localStorage.clear(); location.reload();">再测一次</button>
       </div>
     </div>
   </div>
@@ -320,6 +316,44 @@
     // ================= 状态变量 =================
     let currentIndex = 0;
     let answers = new Array(questions.length).fill(null);
+    let scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+
+    // ================= 初始化：尝试从 localStorage 恢复状态 =================
+    function loadState() {
+      const savedAnswers = localStorage.getItem('quizAnswers');
+      const savedScores = localStorage.getItem('quizScores');
+      const savedIndex = localStorage.getItem('quizCurrentIndex');
+      if (savedAnswers && savedScores && savedIndex) {
+        try {
+          answers = JSON.parse(savedAnswers);
+          scores = JSON.parse(savedScores);
+          currentIndex = parseInt(savedIndex, 10);
+          // 检查数据完整性
+          if (answers.length !== questions.length) throw new Error('invalid');
+        } catch(e) {
+          // 数据损坏，重置
+          resetState();
+        }
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem('quizAnswers', JSON.stringify(answers));
+      localStorage.setItem('quizScores', JSON.stringify(scores));
+      localStorage.setItem('quizCurrentIndex', currentIndex);
+    }
+
+    function resetState() {
+      answers = new Array(questions.length).fill(null);
+      scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+      currentIndex = 0;
+      localStorage.removeItem('quizAnswers');
+      localStorage.removeItem('quizScores');
+      localStorage.removeItem('quizCurrentIndex');
+      // 注意：不删除 hasClickedReserve，由再测一次按钮清除
+    }
+
+    loadState();
 
     // ================= 界面渲染 =================
     const quizDiv = document.getElementById("quiz");
@@ -350,6 +384,10 @@
       } else {
         quizDiv.innerHTML = '';
         submitArea.style.display = 'block';
+        // 如果已经点过预约链接，则自动显示结果（适用于从预约返回的场景）
+        if (localStorage.getItem('hasClickedReserve') === 'true') {
+          showResult();
+        }
       }
     }
 
@@ -365,20 +403,21 @@
         alert('请选择一个选项');
         return;
       }
+      // 累计分数（同时保存原始答案即可，分数可以在需要时重新计算，但为了简单，我们也直接更新scores）
+      const q = questions[currentIndex];
+      const ans = answers[currentIndex];
+      if (ans === 'A') scores[q.dimension] += 1;
+      else if (ans === 'B') scores[q.dimension] -= 1;
+
       currentIndex++;
+      saveState();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showQuestion();
     };
 
     // ================= 计分与类型判定 =================
     function calculateType() {
-      let scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
-      questions.forEach((q, idx) => {
-        const ans = answers[idx];
-        if (ans === 'A') scores[q.dimension] += 1;
-        else if (ans === 'B') scores[q.dimension] -= 1;
-      });
-
+      // scores 已经累计好了，直接使用
       const dims = [
         { key: 'EI', left: 'E', right: 'I', score: scores.EI, balanceKey: 'EI_balance' },
         { key: 'SN', left: 'S', right: 'N', score: scores.SN, balanceKey: 'SN_balance' },
@@ -438,11 +477,22 @@
       if (guideModal.style.display === "flex") {
         updateGuideModal();
       }
+      // 当窗口重新获得焦点时，如果答案已完成且已预约，直接显示结果（处理从预约返回刷新页面的情况）
+      if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true' && guideModal.style.display !== 'flex') {
+        showResult();
+      }
     });
 
     document.getElementById("submitBtn").addEventListener("click", function() {
-      guideModal.style.display = "flex";
-      updateGuideModal();
+      // 保存当前状态（确保即使没有点下一题也能保存）
+      saveState();
+      if (localStorage.getItem("hasClickedReserve") === "true") {
+        // 已经预约过，直接显示结果，不弹引导
+        showResult();
+      } else {
+        guideModal.style.display = "flex";
+        updateGuideModal();
+      }
     });
 
     // ================= 显示结果 =================
@@ -469,7 +519,7 @@
       document.getElementById("resultModal").style.display = "none";
     };
 
-    // 启动
+    // 启动：显示题目或恢复后的状态
     showQuestion();
   </script>
 </body>
