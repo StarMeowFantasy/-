@@ -249,16 +249,12 @@
       <p class="convert-hint">花有千种，命有万变，唯有你的选择，能让锦绣成真。</p>
       <div class="action-buttons">
         <button onclick="closeResult()">关闭</button>
-        <!-- 再测一次：清除所有状态后刷新 -->
         <button onclick="localStorage.clear(); location.reload();">再测一次</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ================= 每次刷新清除预约记录 =================
-    localStorage.removeItem('hasClickedReserve');
-
     // ================= 题目数据 =================
     const questions = [
       // E/I 维度 1-5
@@ -287,9 +283,8 @@
       { question: "整理房间时，你的风格是：", optionA: "分门别类，各归其位", optionB: "大致看着整洁就行，细节随意", dimension: "JP" }
     ];
 
-    // ================= 花神结果库（图片链接已保留） =================
+    // ================= 花神结果库 =================
     const results = {
-      // 标准16型
       "INTJ": { name: "琼花", yayi: "维扬一株，孤傲帝王", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%90%BC%E8%8A%B1.jpg", poem: "你往那里一站，空气自动让出三尺。你像极了古画里独坐高阁的策士，不屑解释，不屑争辩，因为你早已看穿十步之后的结局。世人觉得你冷，只有你知道，这份冷是为了保护内心那座精密的城池。你的决断力像刀，切掉所有冗余，只留最锋利的真理。偶尔，你也会在深夜怀疑自己是否太过苛刻——但下一秒，你又开始规划明年的战略。在《花开锦绣》的世界里，你就是那个翻云覆雨、改天换地的执棋人，点击一窥你的锦绣棋局。" },
       "INTP": { name: "辛夷", yayi: "木笔书空，思辨之巅", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E8%BE%9B%E5%A4%B7.jpg", poem: "你的大脑是一座永不停机的实验室，每一个念头都在被拆解、重组、验证。你讨厌被感性绑架，但偏偏对“为什么”有着近乎偏执的浪漫。与人争论时，你像猫捉老鼠，享受逻辑的碾压快感，但转身又会对一本冷门科普书温柔地抚摸。你外表散漫，内心却有一张严丝合缝的思维地图——只是懒得向别人展示。《花开锦绣》里那些以智破局、绝地反杀的高光时刻，正是你的颅内日常。" },
       "ENTJ": { name: "锦带", yayi: "锦瑟华年，锋芒夺目", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E9%94%A6%E5%B8%A6.jpg", poem: "你是天生的“大场面生物”，走到哪里都像自带追光。你不仅能自己发光，还能把周围人的能量一并点燃。你厌恶无能，欣赏高效，对拖后腿的人毫不留情——但你的严厉背后，藏着一种“恨铁不成钢”的护短。你享受征服，更享受带着团队一起赢的快感。唯一的小毛病：偶尔会把“建议”错写成“命令”，还不许人改。《花开锦绣》里双强互宠、并肩封王的爽文设定，简直就是为你量身定制。" },
@@ -306,7 +301,6 @@
       "ISFP": { name: "朝颜", yayi: "晨露易逝，唯美画师", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%9C%9D%E9%A2%9C.jpg", poem: "你是人间的“感官诗人”，总能在晨光、落叶、雨滴里捕捉到别人忽略的美。你的内心戏丰富得可以拍八十集文艺片，但表面上永远云淡风轻。你热爱一切艺术形式，画画、音乐、摄影，甚至穿搭都自带高级感。你不擅长争辩，却擅长用一幅画、一首歌让整个房间安静下来。你的脆弱像朝颜花，只在清晨独自展露，太阳一出就藏回心里。《花开锦绣》的每一帧绝美画面，都与你的审美DNA共振。" },
       "ESTP": { name: "紫薇", yayi: "独占芳菲，冒险玩家", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%B4%AB%E8%96%87.jpg", poem: "你是天生的“急智者”，越紧张越兴奋，越混乱越清醒。你像紫薇花，盛夏独放，敢与烈日争辉。你热衷冒险，享受不可预知的刺激，对“按部就班”四个字有着本能的抗拒。你的口才和反应速度一流，在谈判桌上几乎从没输过。别人觉得你冲动，只有你知道，你的每一次“冒险”都经过了脑内高速模拟。《花开锦绣》里那些绝境反转、以奇制胜的名场面，你闭着眼都能演。" },
       "ESFP": { name: "合欢", yayi: "夜合欢颜，人间烟火", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E5%90%88%E6%AC%A2.jpg", poem: "你是人群中的“多巴胺喷射机”，有你在的地方，再冷的场子也能沸腾起来。你热爱生活本身，连吃碗面都能吃出米其林的感觉。你的共情能力直白而热烈，朋友失恋，你比他还难过；朋友升职，你比他还开心。你偶尔也会在深夜感到孤独，但睡一觉又满血复活。你的快乐不是傻，而是选择用热烈去拥抱这个不完美的世界。《花开锦绣》里那些嬉笑怒骂、充满烟火气的瞬间，就是你存在的意义。" },
-      // 平衡花神
       "EI_balance": { name: "木兰", yayi: "内外兼修，双面镜心", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%9C%A8%E5%85%B0.jpg", poem: "你在人群中可以谈笑风生，转身也能享受独处的深邃。你既不是社牛也不是社恐，而是“社适”——你能根据场合自动切换频率。你既能享受热闹的共鸣，又需要安静的蓄能，像木兰一样，在庭院与野地之间自由生长。你最大的天赋是“分寸感”，从不越界，也从不冷场。在《花开锦绣》里，你就是那个既能周旋于朝堂、又能隐居于山野的双面智者。" },
       "SN_balance": { name: "白芷", yayi: "虚实相生，通感之灵", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%99%BD%E8%8A%B7.jpg", poem: "你既爱那些具体可触的细节——比如茶水的温度、布料的手感，也沉迷于抽象的诗意和遥远的幻想。你像白芷，既可用作入药的实体，又散发着通灵的异香。你在现实与理想之间搭了一座桥，让务实的人觉得你不飘，让浪漫的人觉得你不俗。你的思维常常“通感”——看见颜色会闻到味道，听见音乐会看见画面。《花开锦绣》的世界观，就是为你这种通感灵魂设计的。" },
       "TF_balance": { name: "泽兰", yayi: "情理交融，慈悲刀锋", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E6%B3%BD%E5%85%B0.jpg", poem: "你是人间罕见的“理性与感性双核驱动”者。分析问题时，你的逻辑冷静得像手术刀；但涉及人情时，你的心肠又软得像棉花糖。你可以在谈判桌上寸步不让，回家却为流浪猫掉眼泪。你既不被情绪绑架，也不被数据异化，你总是在天平两端找到最优雅的平衡点。《花开锦绣》里那些既能运筹帷幄、又能深情相拥的角色，正是你的灵魂剪影。" },
@@ -318,7 +312,7 @@
     let answers = new Array(questions.length).fill(null);
     let scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
 
-    // ================= 初始化：尝试从 localStorage 恢复状态 =================
+    // ================= 持久化存储 =================
     function loadState() {
       const savedAnswers = localStorage.getItem('quizAnswers');
       const savedScores = localStorage.getItem('quizScores');
@@ -328,10 +322,8 @@
           answers = JSON.parse(savedAnswers);
           scores = JSON.parse(savedScores);
           currentIndex = parseInt(savedIndex, 10);
-          // 检查数据完整性
           if (answers.length !== questions.length) throw new Error('invalid');
         } catch(e) {
-          // 数据损坏，重置
           resetState();
         }
       }
@@ -350,7 +342,7 @@
       localStorage.removeItem('quizAnswers');
       localStorage.removeItem('quizScores');
       localStorage.removeItem('quizCurrentIndex');
-      // 注意：不删除 hasClickedReserve，由再测一次按钮清除
+      localStorage.removeItem('quizResultType');
     }
 
     loadState();
@@ -384,10 +376,6 @@
       } else {
         quizDiv.innerHTML = '';
         submitArea.style.display = 'block';
-        // 如果已经点过预约链接，则自动显示结果（适用于从预约返回的场景）
-        if (localStorage.getItem('hasClickedReserve') === 'true') {
-          showResult();
-        }
       }
     }
 
@@ -403,7 +391,6 @@
         alert('请选择一个选项');
         return;
       }
-      // 累计分数（同时保存原始答案即可，分数可以在需要时重新计算，但为了简单，我们也直接更新scores）
       const q = questions[currentIndex];
       const ans = answers[currentIndex];
       if (ans === 'A') scores[q.dimension] += 1;
@@ -417,14 +404,12 @@
 
     // ================= 计分与类型判定 =================
     function calculateType() {
-      // scores 已经累计好了，直接使用
       const dims = [
         { key: 'EI', left: 'E', right: 'I', score: scores.EI, balanceKey: 'EI_balance' },
         { key: 'SN', left: 'S', right: 'N', score: scores.SN, balanceKey: 'SN_balance' },
         { key: 'TF', left: 'T', right: 'F', score: scores.TF, balanceKey: 'TF_balance' },
         { key: 'JP', left: 'J', right: 'P', score: scores.JP, balanceKey: 'JP_balance' }
       ];
-
       let typeLetters = [];
       let balanceDims = [];
       dims.forEach(dim => {
@@ -432,7 +417,6 @@
         else if (dim.score <= -2) typeLetters.push(dim.right);
         else { typeLetters.push(null); balanceDims.push(dim.balanceKey); }
       });
-
       if (balanceDims.length > 0) {
         return balanceDims[0];
       } else {
@@ -477,17 +461,11 @@
       if (guideModal.style.display === "flex") {
         updateGuideModal();
       }
-      // 当窗口重新获得焦点时，如果答案已完成且已预约，直接显示结果（处理从预约返回刷新页面的情况）
-      if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true' && guideModal.style.display !== 'flex') {
-        showResult();
-      }
     });
 
     document.getElementById("submitBtn").addEventListener("click", function() {
-      // 保存当前状态（确保即使没有点下一题也能保存）
       saveState();
       if (localStorage.getItem("hasClickedReserve") === "true") {
-        // 已经预约过，直接显示结果，不弹引导
         showResult();
       } else {
         guideModal.style.display = "flex";
@@ -498,7 +476,11 @@
     // ================= 显示结果 =================
     function showResult() {
       guideModal.style.display = "none";
-      const typeKey = calculateType();
+      let typeKey = localStorage.getItem('quizResultType');
+      if (!typeKey) {
+        typeKey = calculateType();
+        localStorage.setItem('quizResultType', typeKey);
+      }
       const resultData = results[typeKey];
       if (!resultData) return;
 
@@ -519,8 +501,25 @@
       document.getElementById("resultModal").style.display = "none";
     };
 
-    // 启动：显示题目或恢复后的状态
-    showQuestion();
+    // ================= 初始化：检查是否可直接展示结果 =================
+    function checkAutoShowResult() {
+      // 条件：答题已完成 且 预约链接已被点击过
+      if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true') {
+        // 隐藏答题区域
+        quizDiv.innerHTML = '';
+        submitArea.style.display = 'none';
+        // 直接显示结果（会自动使用已保存的类型或重新计算）
+        showResult();
+        return true;
+      }
+      return false;
+    }
+
+    // 如果自动展示结果成功，就不再显示题目；否则正常开始
+    if (!checkAutoShowResult()) {
+      showQuestion();
+    }
   </script>
 </body>
 </html>
+
