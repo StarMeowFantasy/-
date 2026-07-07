@@ -219,7 +219,7 @@
     <h1>🌸 测一测，你的本命花是哪一朵？</h1>
     <div id="quiz"></div>
     <div id="submitArea" style="display:none;">
-      <p>回答完毕！点击下方按钮看看你的本命花是？</p>
+      <p>回答完毕！点击下方按钮看看你的本命花~</p>
       <button id="submitBtn" class="next-btn">查看我的本命花</button>
     </div>
   </div>
@@ -240,7 +240,7 @@
       <div class="result-header" id="flowerName"></div>
       <div class="result-subtitle" id="flowerYayi"></div>
       <div class="flower-img-wrapper">
-        <img id="flowerImg" class="flower-img" src="" alt="本命花图">
+        <img id="flowerImg" class="flower-img" src="" alt="花神图">
       </div>
       <div class="result-poem" id="flowerPoem"></div>
       <a id="convertLink" href="https://v.qq.com/x/cover/mzc00200seo6p1w/b410283m67n.html" target="_blank" class="convert-link">
@@ -255,32 +255,98 @@
   </div>
 
   <script>
-    // ================= 题目数据 =================
+    // ================= 题目数据（新10题，4选项） =================
     const questions = [
-      // E/I 维度 1-5
-      { question: "在一个陌生的社交场合，你更可能：", optionA: "主动穿梭人群，寻找有趣的人聊天", optionB: "安静地待在角落，等别人来接近你", dimension: "EI" },
-      { question: "当你学习一项新技能时，你倾向于：", optionA: "边做边与人讨论，在交流中纠正", optionB: "独自反复练习，熟练后再展示", dimension: "EI" },
-      { question: "工作之余，最能让你恢复能量的方式是：", optionA: "约朋友热热闹闹地聚会", optionB: "一个人宅家看书或放空", dimension: "EI" },
-      { question: "遇到棘手难题，你第一反应是：", optionA: "打电话给朋友，边倾诉边理思路", optionB: "关起门来自己琢磨，解决后再告知", dimension: "EI" },
-      { question: "在团队协作中，你通常扮演：", optionA: "积极发言、带动气氛的人", optionB: "认真倾听、最后拍板的人", dimension: "EI" },
-      // S/N 维度 6-10
-      { question: "读一本小说时，你更容易被什么吸引？", optionA: "情节的具体走向和人物行动", optionB: "字里行间的氛围和隐喻", dimension: "SN" },
-      { question: "你更擅长记忆哪种信息？", optionA: "具体数据、日期、地名", optionB: "抽象概念、理论框架", dimension: "SN" },
-      { question: "面对新项目，你首先会：", optionA: "搜集过往案例，按流程推进", optionB: "脑暴各种可能性，寻找创新点", dimension: "SN" },
-      { question: "与人交谈时，你往往更关注：", optionA: "对方提到的实际事例", optionB: "对方没说出口的情绪与潜台词", dimension: "SN" },
-      { question: "你常被人形容为：", optionA: "脚踏实地，务实可靠", optionB: "天马行空，理想主义", dimension: "SN" },
-      // T/F 维度 11-15
-      { question: "做重大决定时，你更依赖：", optionA: "逻辑分析和客观数据", optionB: "内心的感受和价值观", dimension: "TF" },
-      { question: "在争论中，你更看重：", optionA: "论证是否严密、有据", optionB: "论点是否触动人心", dimension: "TF" },
-      { question: "你更钦佩哪种领导风格？", optionA: "铁面无私，赏罚分明", optionB: "温暖包容，善于共情", dimension: "TF" },
-      { question: "好友向你哭诉烦恼，你通常会：", optionA: "帮他拆解问题，给出解决方案", optionB: "先给个拥抱，让他发泄情绪", dimension: "TF" },
-      { question: "你觉得自己天生更擅长：", optionA: "客观评判事物对错", optionB: "体察他人的喜怒哀乐", dimension: "TF" },
-      // J/P 维度 16-20
-      { question: "日常生活中，你更偏爱：", optionA: "固定的作息和计划表", optionB: "随性的节奏，走到哪算哪", dimension: "JP" },
-      { question: "规划一次旅行，你倾向：", optionA: "提前订好每日行程和住宿", optionB: "只定大方向，到地再随缘探索", dimension: "JP" },
-      { question: "工作中最让你抓狂的是：", optionA: "临时打乱原本的计划", optionB: "重复单调、毫无变化的流程", dimension: "JP" },
-      { question: "对待待办事项，你习惯：", optionA: "来一件处理一件，有条不紊", optionB: "攒到一起，集中高效解决", dimension: "JP" },
-      { question: "整理房间时，你的风格是：", optionA: "分门别类，各归其位", optionB: "大致看着整洁就行，细节随意", dimension: "JP" }
+      {
+        question: "周末下午，你刚结束一周的工作，你最想做什么？",
+        options: [
+          { text: "约朋友去新开的咖啡馆打卡，聊聊天拍拍照", score: { EI: 1 } },       // +E
+          { text: "一个人窝在沙发里，刷剧、发呆、什么也不想", score: { EI: -1 } },  // +I
+          { text: "打开地图搜一个没去过的地方，来一场说走就走的City Walk", score: { SN: -1 } }, // +N
+          { text: "把下周的行程表排好，顺便把房间彻底收拾一遍", score: { JP: 1 } }   // +J
+        ]
+      },
+      {
+        question: "你在刷手机时看到一篇很长的深度文章，点开后你会？",
+        options: [
+          { text: "快速扫一遍小标题和加粗句，先抓住核心结论", score: { TF: 1 } },      // +T
+          { text: "从头读到尾，甚至会被某句话击中，反复看几遍", score: { SN: -1 } },  // +N
+          { text: "先收藏起来，告诉自己“有空再看”，然后就忘了", score: { JP: -1 } }, // +P
+          { text: "看到一半就跳到评论区，先看看别人怎么说的", score: { EI: 1 } }      // +E
+        ]
+      },
+      {
+        question: "你在团队项目里发现同事的方案有明显漏洞，你会怎么做？",
+        options: [
+          { text: "直接指出来，用数据和逻辑说明为什么不可行", score: { TF: 1 } },      // +T
+          { text: "私下找他说，怕当众让他难堪，措辞反复斟酌", score: { TF: -1 } },     // +F
+          { text: "先不说，等他自己发现，或者等出了问题再解决", score: { JP: -1 } },  // +P
+          { text: "在群里发一条“我有个想法，大家帮我看看”，把问题包装成讨论", score: { EI: 1 } } // +E
+        ]
+      },
+      {
+        question: "你正在规划一次期待已久的旅行，你的风格是？",
+        options: [
+          { text: "精确到小时的行程表，酒店、交通、餐厅全部提前预订", score: { JP: 1 } }, // +J
+          { text: "只订机票和第一晚的酒店，剩下的到了再说", score: { JP: -1 } },        // +P
+          { text: "看了一堆攻略和攻略视频，收藏了几十个地点，但一个都没定", score: { SN: 1 } }, // +S
+          { text: "先发个朋友圈问“有没有人去过这里”，等朋友推荐再决定", score: { EI: 1 } }    // +E
+        ]
+      },
+      {
+        question: "你刚进一家新公司，中午同事们叫你一起吃饭，你会？",
+        options: [
+          { text: "有点紧张但还是会去，想尽快融入大家", score: { EI: -1 } },       // +I
+          { text: "心里想去，嘴上说“你们先去吧”，等别人再叫一次才动", score: { TF: -1 } }, // +F
+          { text: "借故推掉，自己点个外卖，觉得社交好累", score: { EI: -1 } },      // +I
+          { text: "主动提议去某某餐厅，说“我知道附近有一家特别好吃”", score: { EI: 1 } }  // +E
+        ]
+      },
+      {
+        question: "半夜失眠，你躺在床上脑子里最常出现的是？",
+        options: [
+          { text: "一些抽象的念头——人生意义、时间流逝、宇宙有多大", score: { SN: -1 } },  // +N
+          { text: "今天发生的某件事的具体画面——谁说了什么话、哪个表情", score: { SN: 1 } }, // +S
+          { text: "明天要做的事情清单，一件一件在脑子里过", score: { JP: 1 } },          // +J
+          { text: "一个很久没联系的人，突然想起他/她的样子", score: { TF: -1 } }         // +F
+        ]
+      },
+      {
+        question: "你的手机里突然弹出一条陌生人的求助私信，看起来很紧急，你会？",
+        options: [
+          { text: "立刻回复，问清楚情况，看自己能帮上什么忙", score: { EI: 1 } },        // +E
+          { text: "先确认对方身份，观察一下是不是骗子，再决定", score: { TF: 1 } },      // +T
+          { text: "截图发给朋友问“你觉得这是真的假的”", score: { TF: -1 } },            // +F
+          { text: "心里很纠结，想帮忙又怕惹麻烦，最终没回", score: { JP: -1 } }          // +P
+        ]
+      },
+      {
+        question: "你参加一个聚会，中途去了趟洗手间，回来发现大家换了个新话题聊得火热，你会？",
+        options: [
+          { text: "自然地走回座位，问一句“聊什么呢？我也要听”", score: { EI: 1 } },      // +E
+          { text: "在旁边安静坐下，等找到合适的时机再插话", score: { EI: -1 } },         // +I
+          { text: "觉得有点被冷落，掏出手机假装有事刷一下", score: { TF: -1 } },         // +F
+          { text: "主动把话题拉回刚才聊的内容，说“我们刚才还没聊完呢”", score: { JP: 1 } } // +J
+        ]
+      },
+      {
+        question: "你发现自己最近总是不开心，你会如何应对？",
+        options: [
+          { text: "分析原因：是工作、关系还是身体状态？一项项排查", score: { TF: 1 } },    // +T
+          { text: "找最信任的朋友或伴侣倾诉，说出来会好受些", score: { TF: -1 } },        // +F
+          { text: "自己扛着，做点别的事情转移注意力，等它过去", score: { JP: -1 } },      // +P
+          { text: "开始写日记或发仅自己可见的微博，把情绪变成文字", score: { SN: -1 } }    // +N
+        ]
+      },
+      {
+        question: "你看到“花开锦绣”这四个字时，最先联想到的是？",
+        options: [
+          { text: "一部制作精良的古装剧，服化道应该很美", score: { SN: 1 } },             // +S
+          { text: "一种人生状态——努力了很久，终于迎来最好的时候", score: { JP: 1 } },    // +J
+          { text: "某个具体的画面：满院繁花，阳光正好", score: { TF: -1 } },              // +F
+          { text: "一个故事的开头，像是命运用这四个字在敲门", score: { SN: -1 } }          // +N
+        ]
+      }
     ];
 
     // ================= 花神结果库 =================
@@ -357,8 +423,10 @@
         let html = `<div class="progress">第 ${currentIndex + 1} / ${questions.length} 题</div>`;
         html += `<div class="question">${q.question}</div>`;
         html += `<div class="options">`;
-        html += `<button class="option-btn" data-opt="A" onclick="selectOption('A', this)">A. ${q.optionA}</button>`;
-        html += `<button class="option-btn" data-opt="B" onclick="selectOption('B', this)">B. ${q.optionB}</button>`;
+        const labels = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, idx) => {
+          html += `<button class="option-btn" data-opt="${labels[idx]}" onclick="selectOption('${labels[idx]}', this)">${labels[idx]}. ${opt.text}</button>`;
+        });
         html += `</div>`;
         html += `<button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>下一题</button>`;
         quizDiv.innerHTML = html;
@@ -391,10 +459,13 @@
         alert('请选择一个选项');
         return;
       }
+      // 累加分数：根据该题该选项的 score 对象更新维度分数
       const q = questions[currentIndex];
-      const ans = answers[currentIndex];
-      if (ans === 'A') scores[q.dimension] += 1;
-      else if (ans === 'B') scores[q.dimension] -= 1;
+      const opt = answers[currentIndex]; // 'A','B','C','D'
+      const scoreDelta = q.options[['A','B','C','D'].indexOf(opt)].score;
+      for (let dim in scoreDelta) {
+        scores[dim] += scoreDelta[dim];
+      }
 
       currentIndex++;
       saveState();
@@ -503,23 +574,18 @@
 
     // ================= 初始化：检查是否可直接展示结果 =================
     function checkAutoShowResult() {
-      // 条件：答题已完成 且 预约链接已被点击过
       if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true') {
-        // 隐藏答题区域
         quizDiv.innerHTML = '';
         submitArea.style.display = 'none';
-        // 直接显示结果（会自动使用已保存的类型或重新计算）
         showResult();
         return true;
       }
       return false;
     }
 
-    // 如果自动展示结果成功，就不再显示题目；否则正常开始
     if (!checkAutoShowResult()) {
       showQuestion();
     }
   </script>
 </body>
 </html>
-
