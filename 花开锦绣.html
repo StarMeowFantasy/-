@@ -5,15 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>花开锦绣·命定花签｜抽一朵你的本命花</title>
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #fce4ec, #f3e5f5);
       margin: 0; padding: 0;
+      width: 100%;
+      overflow-x: hidden;
       display: flex; justify-content: center; align-items: center; min-height: 100vh;
     }
     .container {
       background: white; padding: 2rem; border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 600px; width: 90%; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 92%;
+      margin: 0 auto;
+      text-align: center;
     }
     h1 { color: #e91e63; margin-bottom: 0.5rem; }
     .progress { font-size: 0.9rem; color: #999; margin-bottom: 1.5rem; }
@@ -40,31 +47,15 @@
       z-index: 10; padding: 1rem;
     }
     .modal-content {
-      background: white; border-radius: 24px; max-width: 480px; width: 100%;
+      background: white; border-radius: 24px; max-width: 480px; width: 92%;
       max-height: 90vh; overflow-y: auto; padding: 2rem 1.5rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; margin: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center;
+      margin: auto;
     }
     .result-header { font-size: 2.2rem; color: #e91e63; font-weight: bold; margin-bottom: 0.2rem; letter-spacing: 2px; }
     .result-subtitle { font-size: 1.1rem; color: #888; font-style: italic; margin-bottom: 1.5rem; }
-
-    /* 图片容器：放大，居中稳定 */
-    .flower-img-wrapper {
-      width: 90%;
-      max-width: 300px;
-      margin: 0 auto 1.5rem;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(233,30,99,0.15);
-    }
-    .flower-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      margin: 0 auto;
-    }
-
+    .flower-img-wrapper { width: 90%; max-width: 300px; margin: 0 auto 1.5rem; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 25px rgba(233,30,99,0.15); }
+    .flower-img { width: 100%; height: auto; display: block; aspect-ratio: 1/1; object-fit: cover; margin: 0 auto; }
     .result-poem {
       background: #fff9fb; border-left: 5px solid #e91e63; padding: 1rem 1.2rem;
       margin: 1.5rem 0; text-align: left; line-height: 1.7; font-size: 0.92rem;
@@ -249,7 +240,6 @@
       }
     ];
 
-    // ================= 花神结果库（判词已精简） =================
     const results = {
       "INTJ": { name: "琼花", yayi: "维扬一株，孤傲帝王", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%90%BC%E8%8A%B1.jpg", poem: "你往那一站，空气自动让出三尺。早就看穿十步之后的结局，不屑解释。世人觉得你冷，只有你知道，这份冷是为了保护内心那座精密的城池。\n→ 《花开锦绣》里翻云覆雨的执棋人，就是你的镜像。" },
       "INTP": { name: "辛夷", yayi: "木笔书空，思辨之巅", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E8%BE%9B%E5%A4%B7.jpg", poem: "你的大脑永不停机，每个念头都被拆解重组。享受逻辑碾压的快感，转身又会对一本冷门书温柔抚摸。外表散漫，内心有一张严丝合缝的思维地图。\n→ 《花开锦绣》里以智破局的高光时刻，正是你的颅内日常。" },
@@ -273,7 +263,6 @@
       "JP_balance": { name: "结香", yayi: "刚柔并济，自在从容", img: "https://flower-image-1449725281.cos.ap-shanghai.myqcloud.com/%E7%BB%93%E9%A6%99.jpg", poem: "享受计划的秩序感，又迷恋变数的惊喜。可以花三天做完美行程，到了全部推翻随性乱逛。看似随波逐流，实则暗握舵盘。心中有纲，行止无疆。\n→ 《花开锦绣》里既懂运筹、又敢冒险的主角气质，说的就是你。" }
     };
 
-    // ================= 预处理：每个维度涉及的题目索引 =================
     const dimQuestions = { EI: [], SN: [], TF: [], JP: [] };
     questions.forEach((q, idx) => {
       q.options.forEach(opt => {
