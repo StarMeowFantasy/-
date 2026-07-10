@@ -33,12 +33,15 @@
     }
     .option-btn:hover { background: #fce4ec; border-color: #e91e63; }
     .option-btn.selected { background: #e91e63; color: white; border-color: #e91e63; }
-    .next-btn, .btn-link, .btn-primary {
+    .nav-buttons {
+      display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.5rem;
+    }
+    .nav-btn {
       background: #e91e63; color: white; border: none; padding: 0.8rem 2rem;
       border-radius: 30px; font-size: 1rem; cursor: pointer; margin: 0.5rem;
       text-decoration: none; display: inline-block; transition: background 0.2s;
     }
-    .next-btn:disabled { background: #ddd; cursor: not-allowed; }
+    .nav-btn:disabled { background: #ddd; cursor: not-allowed; }
     .btn-link { background: #ff9800; }
     .btn-primary { background: #4caf50; }
     .modal {
@@ -75,34 +78,6 @@
       font-size: 0.9rem; color: #555; cursor: pointer; transition: background 0.2s;
     }
     .action-buttons button:hover { background: #e0e0e0; }
-
-    /* 悬浮返回按钮 */
-    #floatBtn {
-      display: none;
-      position: fixed;
-      bottom: 30px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      background: #e91e63;
-      color: white;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(233,30,99,0.4);
-      text-align: center;
-      line-height: 1.2;
-      font-size: 0.75rem;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 100;
-      border: none;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.2s;
-    }
-    #floatBtn:hover { transform: scale(1.1); }
   </style>
 </head>
 <body>
@@ -111,19 +86,11 @@
     <div id="quiz"></div>
     <div id="submitArea" style="display:none;">
       <p>回答完毕！点击下方按钮看看你的本命花~</p>
-      <button id="submitBtn" class="next-btn">查看我的本命花</button>
+      <button id="submitBtn" class="nav-btn">查看我的本命花</button>
     </div>
   </div>
 
-  <div id="guideModal" class="modal">
-    <div class="modal-content">
-      <h2>马上揭晓！</h2>
-      <p>请先去腾讯视频预约《花开锦绣》，即可解锁结果👇</p>
-      <a id="reserveLink" href="https://v.qq.com/x/cover/mzc00200seo6p1w/b410283m67n.html" target="_blank" class="btn-link">去预约</a>
-      <div id="reservedBtnContainer"></div>
-    </div>
-  </div>
-
+  <!-- 结果展示弹窗（直接显示，无需预约） -->
   <div id="resultModal" class="modal">
     <div class="modal-content">
       <div class="result-header" id="flowerName"></div>
@@ -143,99 +110,97 @@
     </div>
   </div>
 
-  <button id="floatBtn" onclick="location.reload()">返回<br>查看</button>
-
   <script>
-    // ================= 题目数据 =================
+    // ================= 精简后的题目数据（数量不变，维度分数不变） =================
     const questions = [
       {
-        question: "周末下午，你刚结束一周的工作，你最想做什么？",
+        question: "周末下午，刚结束一周的工作，你想？",
         options: [
-          { text: "约朋友去新开的咖啡馆打卡，聊聊天拍拍照", score: { EI: 1 } },
-          { text: "一个人窝在沙发里，刷剧、发呆、什么也不想", score: { EI: -1 } },
-          { text: "打开地图搜一个没去过的地方，来一场说走就走的City Walk", score: { SN: -1 } },
-          { text: "把下周的行程表排好，顺便把房间彻底收拾一遍", score: { JP: 1 } }
+          { text: "约朋友去咖啡馆聊天拍照", score: { EI: 1 } },
+          { text: "独自窝沙发刷剧发呆", score: { EI: -1 } },
+          { text: "打开地图，说走就走", score: { SN: -1 } },
+          { text: "排下周行程，彻底收拾房间", score: { JP: 1 } }
         ]
       },
       {
-        question: "你在刷手机时看到一篇很长的深度文章，点开后你会？",
+        question: "刷到一篇很长的深度文章，你会？",
         options: [
-          { text: "快速扫一遍小标题和加粗句，先抓住核心结论", score: { TF: 1 } },
-          { text: "从头读到尾，甚至会被某句话击中，反复看几遍", score: { SN: -1 } },
-          { text: "先收藏起来，告诉自己“有空再看”，然后就忘了", score: { JP: -1 } },
-          { text: "看到一半就跳到评论区，先看看别人怎么说的", score: { EI: 1 } }
+          { text: "扫标题和加粗句，先抓结论", score: { TF: 1 } },
+          { text: "从头读到尾，被某句话击中", score: { SN: -1 } },
+          { text: "收藏起来，告诉自己“有空再看”", score: { JP: -1 } },
+          { text: "看到一半先看评论区", score: { EI: 1 } }
         ]
       },
       {
-        question: "你在团队项目里发现同事的方案有明显漏洞，你会怎么做？",
+        question: "团队项目中，发现同事方案有漏洞，你会？",
         options: [
-          { text: "直接指出来，用数据和逻辑说明为什么不可行", score: { TF: 1 } },
-          { text: "私下找他说，怕当众让他难堪，措辞反复斟酌", score: { TF: -1 } },
-          { text: "先不说，等他自己发现，或者等出了问题再解决", score: { JP: -1 } },
-          { text: "在群里发一条“我有个想法，大家帮我看看”，把问题包装成讨论", score: { EI: 1 } }
+          { text: "直接指出，用数据说明", score: { TF: 1 } },
+          { text: "私下找他说，反复斟酌措辞", score: { TF: -1 } },
+          { text: "先不说，等他自己发现", score: { JP: -1 } },
+          { text: "群里发“我有个想法”，包装成讨论", score: { EI: 1 } }
         ]
       },
       {
-        question: "你正在规划一次期待已久的旅行，你的风格是？",
+        question: "规划一次期待已久的旅行，你的风格是？",
         options: [
-          { text: "精确到小时的行程表，酒店、交通、餐厅全部提前预订", score: { JP: 1 } },
-          { text: "只订机票和第一晚的酒店，剩下的到了再说", score: { JP: -1 } },
-          { text: "看了一堆攻略和攻略视频，收藏了几十个地点，但一个都没定", score: { SN: 1 } },
-          { text: "先发个朋友圈问“有没有人去过这里”，等朋友推荐再决定", score: { EI: 1 } }
+          { text: "精确到小时的行程表，全部预订", score: { JP: 1 } },
+          { text: "只订机票和第一晚酒店", score: { JP: -1 } },
+          { text: "收藏一堆攻略但都不定", score: { SN: 1 } },
+          { text: "发朋友圈问推荐再决定", score: { EI: 1 } }
         ]
       },
       {
-        question: "你刚进一家新公司，中午同事们叫你一起吃饭，你会？",
+        question: "刚进新公司，中午同事叫你吃饭，你会？",
         options: [
-          { text: "有点紧张但还是会去，想尽快融入大家", score: { EI: -1 } },
-          { text: "心里想去，嘴上说“你们先去吧”，等别人再叫一次才动", score: { TF: -1 } },
-          { text: "借故推掉，自己点个外卖，觉得社交好累", score: { EI: -1 } },
-          { text: "主动提议去某某餐厅，说“我知道附近有一家特别好吃”", score: { EI: 1 } }
+          { text: "紧张但会去，想融入", score: { EI: -1 } },
+          { text: "心里想去，嘴上说“你们先去吧”", score: { TF: -1 } },
+          { text: "借故推掉，自己点外卖", score: { EI: -1 } },
+          { text: "主动提议去哪家餐厅", score: { EI: 1 } }
         ]
       },
       {
-        question: "半夜失眠，你躺在床上脑子里最常出现的是？",
+        question: "半夜失眠，脑子里最常出现？",
         options: [
-          { text: "一些抽象的念头——人生意义、时间流逝、宇宙有多大", score: { SN: -1 } },
-          { text: "今天发生的某件事的具体画面——谁说了什么话、哪个表情", score: { SN: 1 } },
-          { text: "明天要做的事情清单，一件一件在脑子里过", score: { JP: 1 } },
-          { text: "一个很久没联系的人，突然想起他/她的样子", score: { TF: -1 } }
+          { text: "抽象念头：人生意义、宇宙", score: { SN: -1 } },
+          { text: "今天某件事的具体画面", score: { SN: 1 } },
+          { text: "明天要做的事情清单", score: { JP: 1 } },
+          { text: "突然想起某个久未联系的人", score: { TF: -1 } }
         ]
       },
       {
-        question: "你的手机里突然弹出一条陌生人的求助私信，看起来很紧急，你会？",
+        question: "弹出一条陌生人求助私信，看起来很紧急，你会？",
         options: [
-          { text: "立刻回复，问清楚情况，看自己能帮上什么忙", score: { EI: 1 } },
-          { text: "先确认对方身份，观察一下是不是骗子，再决定", score: { TF: 1 } },
-          { text: "截图发给朋友问“你觉得这是真的假的”", score: { TF: -1 } },
-          { text: "心里很纠结，想帮忙又怕惹麻烦，最终没回", score: { JP: -1 } }
+          { text: "立刻回复问清情况", score: { EI: 1 } },
+          { text: "先确认身份，观察是否骗子", score: { TF: 1 } },
+          { text: "截图问朋友“这是真的假的”", score: { TF: -1 } },
+          { text: "纠结后没回", score: { JP: -1 } }
         ]
       },
       {
-        question: "你参加一个聚会，中途去了趟洗手间，回来发现大家换了个新话题聊得火热，你会？",
+        question: "聚会中途去了洗手间，回来大家换了新话题聊得火热，你会？",
         options: [
-          { text: "自然地走回座位，问一句“聊什么呢？我也要听”", score: { EI: 1 } },
-          { text: "在旁边安静坐下，等找到合适的时机再插话", score: { EI: -1 } },
-          { text: "觉得有点被冷落，掏出手机假装有事刷一下", score: { TF: -1 } },
-          { text: "主动把话题拉回刚才聊的内容，说“我们刚才还没聊完呢”", score: { JP: 1 } }
+          { text: "自然走回，问“聊什么呢？”", score: { EI: 1 } },
+          { text: "安静坐下，等时机插话", score: { EI: -1 } },
+          { text: "感觉被冷落，掏手机刷一下", score: { TF: -1 } },
+          { text: "把话题拉回刚才聊的内容", score: { JP: 1 } }
         ]
       },
       {
-        question: "你发现自己最近总是不开心，你会如何应对？",
+        question: "发现自己最近总是不开心，你会？",
         options: [
-          { text: "分析原因：是工作、关系还是身体状态？一项项排查", score: { TF: 1 } },
-          { text: "找最信任的朋友或伴侣倾诉，说出来会好受些", score: { TF: -1 } },
-          { text: "自己扛着，做点别的事情转移注意力，等它过去", score: { JP: -1 } },
-          { text: "开始写日记或发仅自己可见的微博，把情绪变成文字", score: { SN: -1 } }
+          { text: "分析原因：工作、关系还是身体", score: { TF: 1 } },
+          { text: "找信任的人倾诉", score: { TF: -1 } },
+          { text: "自己扛，转移注意力", score: { JP: -1 } },
+          { text: "写日记或发仅自己可见的动态", score: { SN: -1 } }
         ]
       },
       {
-        question: "你看到“花开锦绣”这四个字时，最先联想到的是？",
+        question: "看到“花开锦绣”四个字，最先联想到？",
         options: [
-          { text: "一部制作精良的古装剧，服化道应该很美", score: { SN: 1 } },
-          { text: "一种人生状态——努力了很久，终于迎来最好的时候", score: { JP: 1 } },
-          { text: "某个具体的画面：满院繁花，阳光正好", score: { TF: -1 } },
-          { text: "一个故事的开头，像是命运用这四个字在敲门", score: { SN: -1 } }
+          { text: "制作精良的古装剧，服化道美", score: { SN: 1 } },
+          { text: "努力很久终于迎来最好的时候", score: { JP: 1 } },
+          { text: "满院繁花，阳光正好的画面", score: { TF: -1 } },
+          { text: "故事开头，命运在敲门", score: { SN: -1 } }
         ]
       }
     ];
@@ -339,9 +304,17 @@
         q.options.forEach((opt, idx) => {
           html += `<button class="option-btn" data-opt="${labels[idx]}" onclick="selectOption('${labels[idx]}', this)">${labels[idx]}. ${opt.text}</button>`;
         });
-        html += `</div><button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>下一题</button>`;
+        html += `</div>`;
+        html += `<div class="nav-buttons">`;
+        if (currentIndex > 0) {
+          html += `<button class="nav-btn" onclick="prevQuestion()" style="background:#999;">上一题</button>`;
+        }
+        html += `<button id="nextBtn" class="nav-btn" onclick="nextQuestion()" disabled>下一题</button>`;
+        html += `</div>`;
+
         quizDiv.innerHTML = html;
         submitArea.style.display = "none";
+
         if (answers[currentIndex] !== null) {
           document.querySelectorAll('.option-btn').forEach(btn => {
             if (btn.dataset.opt === answers[currentIndex]) btn.classList.add('selected');
@@ -368,6 +341,20 @@
       const scoreDelta = q.options[['A','B','C','D'].indexOf(opt)].score;
       for (let dim in scoreDelta) scores[dim] += scoreDelta[dim];
       currentIndex++;
+      saveState();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showQuestion();
+    };
+
+    window.prevQuestion = function() {
+      if (currentIndex === 0) return;
+      currentIndex--;
+      const prevAns = answers[currentIndex];
+      if (prevAns) {
+        const optIndex = ['A','B','C','D'].indexOf(prevAns);
+        const scoreDelta = questions[currentIndex].options[optIndex].score;
+        for (let dim in scoreDelta) scores[dim] -= scoreDelta[dim];
+      }
       saveState();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showQuestion();
@@ -425,60 +412,11 @@
       return dims.map(d => decisions[d.key]).join('');
     }
 
-    const guideModal = document.getElementById("guideModal");
-    const reserveLink = document.getElementById("reserveLink");
-    const reservedBtnContainer = document.getElementById("reservedBtnContainer");
-    const floatBtn = document.getElementById("floatBtn");
-
-    function createReservedButton() {
-      if (document.getElementById("alreadyReservedBtn")) return;
-      const btn = document.createElement("button");
-      btn.id = "alreadyReservedBtn";
-      btn.className = "btn-primary";
-      btn.innerText = "我已预约，查看结果";
-      btn.addEventListener("click", showResult);
-      reservedBtnContainer.innerHTML = "";
-      reservedBtnContainer.appendChild(btn);
-    }
-
-    function updateGuideModal() {
-      if (localStorage.getItem("hasClickedReserve") === "true") {
-        reserveLink.style.display = "none";
-        createReservedButton();
-        floatBtn.style.display = "flex";
-      } else {
-        reserveLink.style.display = "inline-block";
-        reservedBtnContainer.innerHTML = "";
-        floatBtn.style.display = "none";
-      }
-    }
-
-    reserveLink.addEventListener("click", function(e) {
-      e.preventDefault();
-      localStorage.setItem("hasClickedReserve", "true");
-      window.open(reserveLink.href, "_blank");
-      updateGuideModal();
-    });
-
-    window.addEventListener("focus", function() {
-      if (guideModal.style.display === "flex") updateGuideModal();
-      if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true') {
-        floatBtn.style.display = 'flex';
-      }
-    });
-
     document.getElementById("submitBtn").addEventListener("click", function() {
-      saveState();
-      if (localStorage.getItem("hasClickedReserve") === "true") {
-        showResult();
-      } else {
-        guideModal.style.display = "flex";
-        updateGuideModal();
-      }
+      showResult();
     });
 
     function showResult() {
-      guideModal.style.display = "none";
       let typeKey = localStorage.getItem('quizResultType');
       if (!typeKey) {
         typeKey = calculateType();
@@ -497,32 +435,13 @@
       }
       document.getElementById("flowerPoem").innerText = resultData.poem;
       document.getElementById("resultModal").style.display = "flex";
-      floatBtn.style.display = "flex";
     }
 
     window.closeResult = function() {
       document.getElementById("resultModal").style.display = "none";
     };
 
-    function checkAutoShowResult() {
-      if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true') {
-        quizDiv.innerHTML = '';
-        submitArea.style.display = 'none';
-        showResult();
-        return true;
-      }
-      return false;
-    }
-
-    if (currentIndex === questions.length && localStorage.getItem('hasClickedReserve') === 'true') {
-      floatBtn.style.display = 'flex';
-    } else {
-      floatBtn.style.display = 'none';
-    }
-
-    if (!checkAutoShowResult()) {
-      showQuestion();
-    }
+    showQuestion();
   </script>
 </body>
 </html>
